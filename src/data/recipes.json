@@ -1,0 +1,80 @@
+[
+  {
+    "name": "Glutenvrije Snack Bowl",
+    "meal_type": "Snacks",
+    "diet": "Glutenvrij",
+    "ingredients": ["rijstwafels", "noten", "gedroogd fruit"]
+  },
+  {
+    "name": "Glutenvrije Diner Pasta",
+    "meal_type": "Diner",
+    "diet": "Glutenvrij",
+    "ingredients": ["glutenvrije pasta", "tomatensaus", "kip"]
+  },
+  {
+    "name": "Glutenvrije Ontbijt Smoothie",
+    "meal_type": "Ontbijt",
+    "diet": "Glutenvrij",
+    "ingredients": ["banaan", "spinazie", "amandelmelk"]
+  },
+  {
+    "name": "Vegetarische Pasta",
+    "meal_type": "Diner",
+    "diet": "Vegetarisch",
+    "ingredients": ["pasta", "tomatensaus", "courgette"]
+  },
+  {
+    "name": "Vegetarisch Ontbijt Omelet",
+    "meal_type": "Ontbijt",
+    "diet": "Vegetarisch",
+    "ingredients": ["eieren", "kaas", "paprika"]
+  },
+  {
+    "name": "Vegetarische Snack Plank",
+    "meal_type": "Snacks",
+    "diet": "Vegetarisch",
+    "ingredients": ["wortel", "komkommer", "hummus"]
+  },
+  {
+    "name": "Vegan Smoothie",
+    "meal_type": "Ontbijt",
+    "diet": "Vegan",
+    "ingredients": ["banaan", "spinazie", "sojamelk"]
+  },
+  {
+    "name": "Vegan Snack Bowl",
+    "meal_type": "Snacks",
+    "diet": "Vegan",
+    "ingredients": ["noten", "fruit", "havermout"]
+  },
+  {
+    "name": "Vegan Diner Curry",
+    "meal_type": "Diner",
+    "diet": "Vegan",
+    "ingredients": ["kikkererwten", "kokosmelk", "groenten"]
+  },
+  {
+    "name": "Geen dieet Ontbijt Sandwich",
+    "meal_type": "Ontbijt",
+    "diet": "Geen",
+    "ingredients": ["brood", "ei", "ham", "kaas"]
+  },
+  {
+    "name": "Geen dieet Lunch Wrap",
+    "meal_type": "Lunch",
+    "diet": "Geen",
+    "ingredients": ["wrap", "kip", "sla", "tomaat"]
+  },
+  {
+    "name": "Geen dieet Diner Stamppot",
+    "meal_type": "Diner",
+    "diet": "Geen",
+    "ingredients": ["aardappel", "boerenkool", "rookworst"]
+  },
+  {
+    "name": "Geen dieet Snack Mix",
+    "meal_type": "Snacks",
+    "diet": "Geen",
+    "ingredients": ["chips", "noten", "crackers"]
+  }
+]

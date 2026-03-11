@@ -1,0 +1,38 @@
+[
+  {
+    "id": 1,
+    "question": "Voor hoeveel personen plan je de maaltijden?",
+    "type": "choice",
+    "options": ["1", "2", "3", "4+"]
+  },
+  {
+    "id": 2,
+    "question": "Wat is je dieetvoorkeur?",
+    "type": "choice",
+    "options": ["Geen", "Vegetarisch", "Vegan", "Glutenvrij"]
+  },
+  {
+    "id": 3,
+    "question": "Welke maaltijden wil je plannen?",
+    "type": "choice",
+    "options": ["Ontbijt", "Lunch", "Diner", "Snacks"]
+  },
+  {
+    "id": 4,
+    "question": "Voor hoeveel dagen wil je plannen?",
+    "type": "choice",
+    "options": ["1", "2", "3", "4", "5", "7"]
+  },
+ {
+  "id": 5,
+  "question": "Wat is je budget per dag in euro?",
+  "type": "input",
+  "placeholder": "Bijv. 15"
+},
+  {
+    "id": 6,
+    "question": "Wil je dat we recepten genereren op basis van jouw voorkeuren?",
+    "type": "choice",
+    "options": ["Ja", "Nee"]
+  }
+]
