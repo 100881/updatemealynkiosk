@@ -22,9 +22,9 @@ export default function QuestionScreen({ onComplete }: Props) {
 
   const handleAnswer = (option?: string) => {
     const answer = option ?? inputValue
-    if (!answer) return 
+    if (!answer) return
     setAnswers({ ...answers, [question.id]: answer })
-    setInputValue("") 
+    setInputValue("")
     if (currentQuestion + 1 < questionsData.length) {
       setCurrentQuestion(currentQuestion + 1)
     } else {
@@ -33,30 +33,28 @@ export default function QuestionScreen({ onComplete }: Props) {
   }
 
   return (
-    <div style={{
-      display: "flex",
-      flexDirection: "column",
-      justifyContent: "center",
-      alignItems: "center",
-      height: "100vh",
-      fontFamily: "Arial",
-      textAlign: "center"
-    }}>
+    <div
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "center",
+        alignItems: "center",
+        height: "100vh",
+        fontFamily: "Arial",
+        textAlign: "center",
+      }}
+    >
       <h2 style={{ fontSize: "32px", marginBottom: "30px" }}>
         {question.question}
       </h2>
 
       {question.type === "choice" && question.options ? (
         <div style={{ display: "flex", flexDirection: "column", gap: "20px" }}>
-          {question.options.map(option => (
+          {question.options.map((option) => (
             <button
               key={option}
               onClick={() => handleAnswer(option)}
-              style={{
-                fontSize: "24px",
-                padding: "20px 60px",
-                cursor: "pointer"
-              }}
+              style={{ fontSize: "24px", padding: "20px 60px", cursor: "pointer" }}
             >
               {option}
             </button>
@@ -69,20 +67,11 @@ export default function QuestionScreen({ onComplete }: Props) {
             placeholder={question.placeholder}
             value={inputValue}
             onChange={(e) => setInputValue(e.target.value)}
-            style={{
-              fontSize: "24px",
-              padding: "15px 20px",
-              width: "200px",
-              textAlign: "center"
-            }}
+            style={{ fontSize: "24px", padding: "15px 20px", width: "200px", textAlign: "center" }}
           />
           <button
             onClick={() => handleAnswer()}
-            style={{
-              fontSize: "24px",
-              padding: "20px 60px",
-              cursor: "pointer"
-            }}
+            style={{ fontSize: "24px", padding: "20px 60px", cursor: "pointer" }}
           >
             Volgende
           </button>
