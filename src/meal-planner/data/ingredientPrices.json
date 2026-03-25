@@ -1,0 +1,9 @@
+{
+  "Komkommer": { "price": 0.89, "unit": "stuks", "image": "/images/komkommer.jpg" },
+  "Tomaten": { "price": 0.30, "unit": "stuks", "image": "/images/tomaten.jpg" },
+  "Rode ui": { "price": 0.35, "unit": "stuks", "image": "/images/rode_ui.jpg" },
+  "Kalamata olijven": { "price": 1.20, "unit": "100 gram", "image": "/images/olijven.jpg" },
+  "Fetakaas": { "price": 1.50, "unit": "100 gram", "image": "/images/feta.jpg" },
+  "Olijfolie": { "price": 0.20, "unit": "el", "image": "/images/olijfolie.jpg" },
+  "Oregano": { "price": 0.10, "unit": "tl", "image": "/images/oregano.jpg" }
+}

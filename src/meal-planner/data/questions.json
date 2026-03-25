@@ -1,0 +1,44 @@
+[
+  {
+    "id": 1,
+    "question": "Voor hoeveel personen doe je boodschappen?",
+    "type": "choice",
+    "options": ["1", "2", "3", "4+"]
+  },
+  {
+    "id": 2,
+    "question": "Voor hoeveel dagen doe je boodschappen?",
+    "type": "choice",
+    "options": ["1", "2", "3", "4", "5", "7"]
+  },
+  {
+    "id": 3,
+    "question": "Heb je allergieën?",
+    "type": "choice",
+    "options": ["Geen allergieën", "Gluten", "Lactose/Melk", "Noten/Pinda", "Ei"]
+  },
+  {
+    "id": 4,
+    "question": "Heb je dieetvoorkeuren?",
+    "type": "choice",
+    "options": ["Geen voorkeur", "Vegetarisch", "Vegan", "Koolhydraatarm", "Suikervrij"]
+  },
+  {
+    "id": 5,
+    "question": "Heb je een voedingsdoel?",
+    "type": "choice",
+    "options": ["Geen specifiek doel", "Gezond eten", "Spieropbouw", "Afvallen", "Meer energie"]
+  },
+  {
+     "id": 6,
+  "question": "Wat is je budget per persoon?",
+  "type": "choice",
+  "options": ["20", "40", "60", "80"]
+  },
+  {
+    "id": 7,
+    "question": "Welke maaltijden wil je plannen?",
+    "type": "choice",
+    "options": ["Ontbijt", "Lunch", "Avondeten", "Snacks"]
+  }
+]
