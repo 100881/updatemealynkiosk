@@ -13,6 +13,7 @@ export default function MealScreen({ answers }: Props) {
   const people = parseInt(answers["Voor hoeveel personen plan je de maaltijden?"]) || 1
 
 
+<<<<<<< HEAD
   const filtered = recipesData.filter((r: any) => {
     const matchesDiet = r.diet === diet || r.diet === "Geen"
     const matchesMeal = r.meal_type === mealType
@@ -61,6 +62,65 @@ export default function MealScreen({ answers }: Props) {
       <h3 style={{ fontSize: "24px" }}>
         Totale prijs: €{totalPrice.toFixed(2)}
       </h3>
+=======
+  const handleAnswer = (option?: string) => {
+    const answer = option ?? inputValue
+    if (!answer) return
+    setAnswers({ ...answers, [question.id]: answer })
+    setInputValue("")
+    if (currentQuestion + 1 < questionsData.length) {
+      setCurrentQuestion(currentQuestion + 1)
+    } else {
+      onComplete({ ...answers, [question.id]: answer })
+    }
+  }
+
+  return (
+    <div
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "center",
+        alignItems: "center",
+        height: "100vh",
+        fontFamily: "Arial",
+        textAlign: "center",
+      }}
+    >
+      <h2 style={{ fontSize: "32px", marginBottom: "30px" }}>
+        {question.question}
+      </h2>
+
+      {question.type === "choice" && question.options ? (
+        <div style={{ display: "flex", flexDirection: "column", gap: "20px" }}>
+          {question.options.map((option) => (
+            <button
+              key={option}
+              onClick={() => handleAnswer(option)}
+              style={{ fontSize: "24px", padding: "20px 60px", cursor: "pointer" }}
+            >
+              {option}
+            </button>
+          ))}
+        </div>
+      ) : question.type === "input" ? (
+        <div style={{ display: "flex", flexDirection: "column", gap: "20px" }}>
+          <input
+            type="number"
+            placeholder={question.placeholder}
+            value={inputValue}
+            onChange={(e) => setInputValue(e.target.value)}
+            style={{ fontSize: "24px", padding: "15px 20px", width: "200px", textAlign: "center" }}
+          />
+          <button
+            onClick={() => handleAnswer()}
+            style={{ fontSize: "24px", padding: "20px 60px", cursor: "pointer" }}
+          >
+            Volgende
+          </button>
+        </div>
+      ) : null}
+>>>>>>> 1044f5029be9c727a69d33bb43c14759e8b5c099
     </div>
   )
 }
