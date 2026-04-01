@@ -1,9 +1,21 @@
 import recipesData from "../data/recipes.json"
-import productsData from "../data/products.json"
+import productsArray from "../data/products.json"
+
+type Product = {
+  name: string
+  price: number
+  image: string
+}
 
 type Props = {
   answers: Record<string, string>
 }
+
+// Converteer array naar lookup map voor snelle toegang
+const productsData: Record<string, number> = {}
+productsArray.forEach((p: Product) => {
+  productsData[p.name.toLowerCase()] = p.price
+})
 
 export default function MealScreen({ answers }: Props) {
   const diet = answers["Wat is je dieetvoorkeur?"] || "Geen"
@@ -16,7 +28,7 @@ export default function MealScreen({ answers }: Props) {
     const matchesMeal = r.meal_type === mealType
 
     const totalPrice = r.ingredients.reduce((sum: number, ing: string) => {
-      const price = productsData[ing] || 0
+      const price = productsData[ing.toLowerCase()] || 0
       return sum + price
     }, 0) * people
 
@@ -29,7 +41,7 @@ export default function MealScreen({ answers }: Props) {
 
   const ingredientPrices = recipe.ingredients.map((ing: string) => ({
     name: ing,
-    price: (productsData[ing] || 0) * people
+    price: (productsData[ing.toLowerCase()] || 0) * people
   }))
 
   const totalPrice = ingredientPrices.reduce((sum, i) => sum + i.price, 0)

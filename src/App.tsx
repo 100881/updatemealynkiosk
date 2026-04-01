@@ -1,53 +1,37 @@
 import { useState } from "react"
-import WelcomeScreen from "./screens/WelcomeScreen"
-import QuestionScreen from "./screens/QuestionScreen"
-import MealScreen from "./screens/MealScreen"
-import MealPlanner from "./meal-planner/MealPlanner"
-import questionsData from "./data/questions.json"
-
-type Route = "app" | "meal-planner"
+import WelcomeScreen from "./meal-planner/components/WelcomeScreen"
+import QuestionScreen from "./meal-planner/components/QuestionScreen"
+import MealScreen from "./meal-planner/components/MealScreen"
+import type { Answers } from "./meal-planner/utils/matchRecipes"
 
 export default function App() {
-  const [route, setRoute] = useState<Route>("app")
-  const [screen, setScreen] = useState("welcome")
-  const [answers, setAnswers] = useState<Record<string, string>>({})
+  const [screen, setScreen] = useState<"welcome" | "questions" | "meal">("welcome")
+  const [answers, setAnswers] = useState<Answers | null>(null)
 
-  const handleCompleteQuestions = (ans: Record<number, string>) => {
-    const mappedAnswers: Record<string, string> = {}
-    questionsData.forEach(q => {
-      if (ans[q.id] !== undefined) mappedAnswers[q.question] = ans[q.id]
-    })
-    setAnswers(mappedAnswers)
+  const handleCompleteQuestions = (ans: Answers) => {
+    setAnswers(ans)
     setScreen("meal")
   }
 
-  // Meal Planner feature
-  if (route === "meal-planner") {
-    return (
-      <div>
-        <button onClick={() => setRoute("app")}>← Terug</button>
-        <MealPlanner />
-      </div>
-    )
-  }
-
-  // Bestaande app flow
-  if (screen === "welcome") {
-    return (
-      <div>
-        <button onClick={() => setRoute("meal-planner")}>Maaltijdplanner</button>
+  return (
+    <div>
+      {screen === "welcome" && (
         <WelcomeScreen onStart={() => setScreen("questions")} />
-      </div>
-    )
-  }
+      )}
 
-  if (screen === "questions") {
-    return <QuestionScreen onComplete={handleCompleteQuestions} />
-  }
+      {screen === "questions" && (
+        <QuestionScreen onComplete={(ans) => handleCompleteQuestions(ans)} />
+      )}
 
-  if (screen === "meal") {
-    return <MealScreen answers={answers} />
-  }
-
-  return null
+      {screen === "meal" && answers && (
+        <MealScreen
+          answers={answers}
+          onReset={() => {
+            setAnswers(null)
+            setScreen("welcome")
+          }}
+        />
+      )}
+    </div>
+  )
 }

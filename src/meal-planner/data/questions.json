@@ -31,7 +31,7 @@
   },
   {
      "id": 6,
-  "question": "Wat is je budget per persoon?",
+  "question": "Wat is je budget:",
   "type": "choice",
   "options": ["20", "40", "60", "80"]
   },

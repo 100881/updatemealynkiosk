@@ -67,7 +67,7 @@ export default function QuestionScreen({ onComplete }: Props) {
   }
 
   return (
-    <div>
+    <div style={{ padding: 20 }}>
       <h2>{question.question}</h2>
 
       {!showLunchType && question.type === "choice" && (
