@@ -5,8 +5,8 @@ import type { Answers } from "../utils/matchRecipes"
 interface Question {
   id: number
   question: string
-  type: "choice" | "input"
-  options?: string[]
+  type: "choice"
+  options: string[]
 }
 
 interface Props {
@@ -25,78 +25,76 @@ const answerKeys: (keyof Answers)[] = [
   "mealType",
 ]
 
-const lunchOptions = [
-  "Boterham klassiek",
-  "Zoet en hartig",
-  "Gezond en belegd",
-  "MIX pakket",
-]
-
 export default function QuestionScreen({ onComplete }: Props) {
-  const [currentIndex, setCurrentIndex] = useState(0)
-  const [answers, setAnswers] = useState<Partial<Answers>>({})
-  const [showLunchType, setShowLunchType] = useState(false)
+  const [index, setIndex] = useState(0)
+  const [answers, setAnswers] = useState<Partial<Answers>>({
+    allergy: [],
+    diet: [],
+    goal: [],
+  })
+  const [multi, setMulti] = useState<string[]>([])
 
-  const question = questions[currentIndex]
-  const key = answerKeys[currentIndex]
-  const isLast = currentIndex === questions.length - 1
+  const key = answerKeys[index]
+  const isMulti = ["allergy", "diet", "goal"].includes(key)
+  const question = questions[index]
 
-  const goNext = (updated: Partial<Answers>) => {
-    if (key === "mealType" && updated.mealType === "Lunch") {
-      setShowLunchType(true)
+  const handleChoice = (option: string) => {
+    if (isMulti) {
+      if (option.startsWith("Geen")) {
+        const updated = { ...answers, [key]: [option] }
+        setAnswers(updated)
+        nextQuestion(updated)
+        return
+      }
+
+      const updatedMulti = multi.includes(option)
+        ? multi.filter((o) => o !== option)
+        : [...multi, option]
+
+      setMulti(updatedMulti)
+      setAnswers({ ...answers, [key]: updatedMulti })
       return
     }
 
-    if (isLast) {
-      onComplete(updated as Answers)
-    } else {
-      setCurrentIndex(currentIndex + 1)
-    }
-  }
-
-  const handleChoice = (option: string) => {
     const updated = { ...answers, [key]: option }
     setAnswers(updated)
-    goNext(updated)
+    nextQuestion(updated)
   }
 
-  const handleLunchChoice = (option: string) => {
-    const updated = { ...answers, lunchType: option }
-    setAnswers(updated)
-    onComplete(updated as Answers)
+  const nextQuestion = (updatedAnswers: Partial<Answers>) => {
+    setMulti([])
+    if (index === questions.length - 1) {
+      onComplete(updatedAnswers as Answers)
+    } else {
+      setIndex(index + 1)
+    }
   }
 
   return (
     <div style={{ padding: 20 }}>
       <h2>{question.question}</h2>
+      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
+        {question.options.map((opt) => (
+          <button
+            key={opt}
+            onClick={() => handleChoice(opt)}
+            style={{
+              padding: "10px",
+              background: multi.includes(opt) ? "#4caf50" : "#eee",
+            }}
+          >
+            {opt}
+          </button>
+        ))}
+      </div>
 
-      {!showLunchType && question.type === "choice" && (
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
-          {question.options?.map((option) => (
-            <button key={option} onClick={() => handleChoice(option)}>
-              {option}
-            </button>
-          ))}
-        </div>
-      )}
-
-      {showLunchType && (
-        <>
-          <h2>Wat voor lunch wil je?</h2>
-
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
-            {lunchOptions.map((opt) => (
-              <button key={opt} onClick={() => handleLunchChoice(opt)}>
-                <img
-                  src="/testimg.jpg"
-                  alt={opt}
-                  style={{ width: "100%", height: 120, objectFit: "cover" }}
-                />
-                <div>{opt}</div>
-              </button>
-            ))}
-          </div>
-        </>
+      {isMulti && multi.length > 0 && (
+        <button
+          style={{ marginTop: 20, padding: "10px 20px" }}
+          onClick={() => nextQuestion(answers)}
+        >
+          Volgende
+        </button>
       )}
     </div>
   )

@@ -1,28 +1,5 @@
 [
-  {
-    "id": 1,
-    "name": "Griekse salade met feta",
-    "mealType": "Lunch",
-    "diet": ["Vegetarisch", "Geen voorkeur"],
-    "allergens": ["Lactose/Melk"],
-    "goals": ["Gezond eten", "Afvallen", "Geen specifiek doel"],
-    "budgetPerPerson": 4,
-    "description": "Frisse salade met komkommer, tomaat, olijven en feta.",
-    "ingredients": [
-      { "name": "Komkommer", "amount": 1, "unit": "stuks" },
-      { "name": "Tomaten", "amount": 3, "unit": "stuks" },
-      { "name": "Rode ui", "amount": 1, "unit": "stuks" },
-      { "name": "Kalamata olijven", "amount": 80, "unit": "gram" },
-      { "name": "Fetakaas", "amount": 100, "unit": "gram" },
-      { "name": "Olijfolie", "amount": 3, "unit": "el" },
-      { "name": "Oregano", "amount": 1, "unit": "tl" }
-    ],
-    "steps": [
-      "Snijd komkommer, tomaten en rode ui in stukken.",
-      "Voeg olijven en verkruimelde feta toe.",
-      "Besprenkel met olijfolie en bestrooi met oregano."
-    ]
-  },
+
   {
     "id": 2,
     "name": "Kipfilet met rijst en broccoli",
@@ -33,93 +10,15 @@
     "budgetPerPerson": 5,
     "description": "Eenvoudige en voedzame maaltijd met kip, rijst en gestoomde broccoli.",
     "ingredients": [
-      { "name": "Kipfilet", "amount": 150, "unit": "gram" },
-      { "name": "Witte rijst", "amount": 75, "unit": "gram" },
-      { "name": "Broccoli", "amount": 150, "unit": "gram" },
-      { "name": "Olijfolie", "amount": 1, "unit": "el" },
-      { "name": "Knoflookpoeder", "amount": 1, "unit": "tl" },
-      { "name": "Zout en peper", "amount": 1, "unit": "naar smaak" }
-    ],
-    "steps": [
-      "Kook de rijst volgens de verpakking.",
-      "Bak de kipfilet in olijfolie met knoflookpoeder, zout en peper.",
-      "Stoom of kook de broccoli 5 minuten.",
-      "Serveer alles samen op een bord."
+     { "name": "Kipfilet", "amount": 150, "unit": "gram", "image": "./assets/kipfilet.jpg" },
+    { "name": "Witte rijst", "amount": 75, "unit": "gram", "image": "./assets/rijst.jpg" },
+    { "name": "Broccoli", "amount": 150, "unit": "gram", "image": "./assets/broccoli.jpg" },
+    { "name": "Olijfolie", "amount": 1, "unit": "el", "image": "./assets/olijfolie.png" },
+    { "name": "Knoflookpoeder", "amount": 1, "unit": "tl", "image": "./assets/knoflookpoeder.jpg" },
+    { "name": "Zout en peper", "amount": 1, "unit": "naar smaak", "image": "./assets/zout-peper.jpg" }
     ]
   },
-  {
-    "id": 3,
-    "name": "Havermout met banaan en honing",
-    "mealType": "Ontbijt",
-    "diet": ["Vegan", "Vegetarisch", "Geen voorkeur"],
-    "allergens": ["Gluten"],
-    "goals": ["Meer energie", "Gezond eten", "Geen specifiek doel"],
-    "budgetPerPerson": 2,
-    "description": "Voedzaam ontbijt vol vezels en natuurlijke suikers.",
-    "ingredients": [
-      { "name": "Havermout", "amount": 80, "unit": "gram" },
-      { "name": "Plantaardige melk", "amount": 200, "unit": "ml" },
-      { "name": "Banaan", "amount": 1, "unit": "stuks" },
-      { "name": "Honing", "amount": 1, "unit": "el" },
-      { "name": "Kaneel", "amount": 0.5, "unit": "tl" }
-    ],
-    "steps": [
-      "Verwarm de havermout met plantaardige melk op middelhoog vuur.",
-      "Roer regelmatig totdat het dik is (±5 min).",
-      "Snijd de banaan in plakjes en leg bovenop.",
-      "Besprenkel met honing en een snufje kaneel."
-    ]
-  },
-  {
-    "id": 4,
-    "name": "Rode linzensoep",
-    "mealType": "Lunch",
-    "diet": ["Vegan", "Vegetarisch", "Geen voorkeur", "Koolhydraatarm"],
-    "allergens": [],
-    "goals": ["Afvallen", "Gezond eten", "Meer energie", "Geen specifiek doel"],
-    "budgetPerPerson": 3,
-    "description": "Stevige en vullende soep van rode linzen, wortel en kruiden.",
-    "ingredients": [
-      { "name": "Rode linzen", "amount": 100, "unit": "gram" },
-      { "name": "Wortel", "amount": 2, "unit": "stuks" },
-      { "name": "Ui", "amount": 1, "unit": "stuks" },
-      { "name": "Groentebouillon", "amount": 750, "unit": "ml" },
-      { "name": "Komijn", "amount": 1, "unit": "tl" },
-      { "name": "Tomatenpuree", "amount": 2, "unit": "el" },
-      { "name": "Olijfolie", "amount": 1, "unit": "el" }
-    ],
-    "steps": [
-      "Fruit de ui in olijfolie.",
-      "Voeg wortel, linzen, tomatenpuree en komijn toe.",
-      "Giet de bouillon erbij en breng aan de kook.",
-      "Laat 20 minuten zachtjes koken tot de linzen gaar zijn.",
-      "Optioneel: mix de soep glad."
-    ]
-  },
-  {
-    "id": 5,
-    "name": "Scrambled eggs met volkorenbrood",
-    "mealType": "Ontbijt",
-    "diet": ["Vegetarisch", "Geen voorkeur"],
-    "allergens": ["Gluten", "Ei"],
-    "goals": ["Spieropbouw", "Meer energie", "Geen specifiek doel"],
-    "budgetPerPerson": 3,
-    "description": "Eiwitrijk ontbijt met luchtige roerei op geroosterd volkorenbrood.",
-    "ingredients": [
-      { "name": "Eieren", "amount": 3, "unit": "stuks" },
-      { "name": "Volkorenbrood", "amount": 2, "unit": "sneetjes" },
-      { "name": "Boter", "amount": 10, "unit": "gram" },
-      { "name": "Zout en peper", "amount": 1, "unit": "naar smaak" },
-      { "name": "Bieslook", "amount": 1, "unit": "el" }
-    ],
-    "steps": [
-      "Klop de eieren los met zout en peper.",
-      "Smelt boter in een pan op laag vuur.",
-      "Voeg de eieren toe en roer langzaam tot romige scrambled eggs.",
-      "Rooster het brood en leg de eieren erop.",
-      "Garneer met fijngehakte bieslook."
-    ]
-  },
+
   {
     "id": 6,
     "name": "Pasta bolognese",
@@ -146,31 +45,7 @@
       "Laat 10 minuten sudderen en meng met de pasta."
     ]
   },
-  {
-    "id": 7,
-    "name": "Hummus met groentesticks",
-    "mealType": "Snacks",
-    "diet": ["Vegan", "Vegetarisch", "Geen voorkeur", "Koolhydraatarm"],
-    "allergens": [],
-    "goals": ["Afvallen", "Gezond eten", "Geen specifiek doel"],
-    "budgetPerPerson": 2,
-    "description": "Gezonde snack van zelfgemaakte hummus met verse groentesticks.",
-    "ingredients": [
-      { "name": "Kikkererwten (blik)", "amount": 240, "unit": "gram" },
-      { "name": "Tahini", "amount": 2, "unit": "el" },
-      { "name": "Citroensap", "amount": 2, "unit": "el" },
-      { "name": "Knoflook", "amount": 1, "unit": "teentje" },
-      { "name": "Wortel", "amount": 2, "unit": "stuks" },
-      { "name": "Paprika", "amount": 1, "unit": "stuks" },
-      { "name": "Komkommer", "amount": 0.5, "unit": "stuks" }
-    ],
-    "steps": [
-      "Blend kikkererwten, tahini, citroensap en knoflook tot een gladde pasta.",
-      "Voeg een scheut water toe voor de juiste dikte.",
-      "Snijd de groenten in sticks.",
-      "Serveer de hummus in een schaaltje met de groentesticks."
-    ]
-  },
+ 
   {
     "id": 8,
     "name": "Gebakken zalm met zoete aardappel",
@@ -196,52 +71,7 @@
       "Serveer met een schijfje citroen."
     ]
   },
-  {
-    "id": 9,
-    "name": "Smoothie bowl met fruit",
-    "mealType": "Ontbijt",
-    "diet": ["Vegan", "Vegetarisch", "Geen voorkeur", "Suikervrij"],
-    "allergens": [],
-    "goals": ["Meer energie", "Gezond eten", "Afvallen", "Geen specifiek doel"],
-    "budgetPerPerson": 3,
-    "description": "Dikke smoothie bowl met vers fruit en zaden.",
-    "ingredients": [
-      { "name": "Bevroren mango", "amount": 150, "unit": "gram" },
-      { "name": "Bevroren banaan", "amount": 1, "unit": "stuks" },
-      { "name": "Plantaardige melk", "amount": 100, "unit": "ml" },
-      { "name": "Aardbeien", "amount": 80, "unit": "gram" },
-      { "name": "Chiazaad", "amount": 1, "unit": "el" },
-      { "name": "Granola", "amount": 30, "unit": "gram" }
-    ],
-    "steps": [
-      "Blend de mango en banaan met plantaardige melk tot een dikke smoothie.",
-      "Giet in een kom.",
-      "Leg de aardbeien bovenop en bestrooi met chiazaad en granola."
-    ]
-  },
-  {
-    "id": 10,
-    "name": "Tonijnsalade wrap",
-    "mealType": "Lunch",
-    "diet": ["Geen voorkeur", "Koolhydraatarm"],
-    "allergens": ["Gluten"],
-    "goals": ["Spieropbouw", "Afvallen", "Geen specifiek doel"],
-    "budgetPerPerson": 4,
-    "description": "Snelle en eiwitrijke wrap met tonijn en verse groenten.",
-    "ingredients": [
-      { "name": "Tonijn (blik op water)", "amount": 120, "unit": "gram" },
-      { "name": "Wrap (tarwe)", "amount": 1, "unit": "stuks" },
-      { "name": "IJsbergsla", "amount": 50, "unit": "gram" },
-      { "name": "Tomaat", "amount": 1, "unit": "stuks" },
-      { "name": "Mayonaise", "amount": 1, "unit": "el" },
-      { "name": "Citroensap", "amount": 1, "unit": "tl" }
-    ],
-    "steps": [
-      "Meng de tonijn met mayonaise en citroensap.",
-      "Leg sla en tomaat op de wrap.",
-      "Verdeel het tonijnmengsel erover en rol strak op."
-    ]
-  },
+
   {
     "id": 11,
     "name": "Vegetarische curry met kikkererwten",
@@ -269,80 +99,7 @@
       "Serveer over rijst."
     ]
   },
-  {
-    "id": 12,
-    "name": "Groenteomelet",
-    "mealType": "Ontbijt",
-    "diet": ["Vegetarisch", "Geen voorkeur", "Koolhydraatarm", "Suikervrij"],
-    "allergens": ["Ei", "Lactose/Melk"],
-    "goals": ["Spieropbouw", "Afvallen", "Gezond eten", "Geen specifiek doel"],
-    "budgetPerPerson": 3,
-    "description": "Luchtige omelet gevuld met paprika, ui en kaas.",
-    "ingredients": [
-      { "name": "Eieren", "amount": 3, "unit": "stuks" },
-      { "name": "Paprika", "amount": 0.5, "unit": "stuks" },
-      { "name": "Ui", "amount": 0.5, "unit": "stuks" },
-      { "name": "Geraspte kaas", "amount": 30, "unit": "gram" },
-      { "name": "Boter", "amount": 10, "unit": "gram" },
-      { "name": "Zout en peper", "amount": 1, "unit": "naar smaak" }
-    ],
-    "steps": [
-      "Klop de eieren los, breng op smaak.",
-      "Bak de paprika en ui 3 min in boter.",
-      "Giet de eieren erover en bak op laag vuur.",
-      "Strooi kaas op de helft en vouw de omelet dubbel."
-    ]
-  },
-  {
-    "id": 13,
-    "name": "Kipsoep met noedels",
-    "mealType": "Lunch",
-    "diet": ["Geen voorkeur"],
-    "allergens": ["Gluten"],
-    "goals": ["Gezond eten", "Meer energie", "Geen specifiek doel"],
-    "budgetPerPerson": 4,
-    "description": "Warme, troostende kipsoep met rijstnoedels en groenten.",
-    "ingredients": [
-      { "name": "Kipfilet", "amount": 100, "unit": "gram" },
-      { "name": "Kippenbouillon", "amount": 750, "unit": "ml" },
-      { "name": "Rijstnoedels", "amount": 60, "unit": "gram" },
-      { "name": "Wortel", "amount": 1, "unit": "stuks" },
-      { "name": "Selderij", "amount": 1, "unit": "stengel" },
-      { "name": "Peterselie", "amount": 1, "unit": "el" }
-    ],
-    "steps": [
-      "Breng de bouillon aan de kook.",
-      "Voeg wortel en selderij toe, kook 10 min.",
-      "Voeg de noedels en gekookte kip toe.",
-      "Serveer met peterselie."
-    ]
-  },
-  {
-    "id": 14,
-    "name": "Vegan boeddhakom",
-    "mealType": "Lunch",
-    "diet": ["Vegan", "Vegetarisch", "Geen voorkeur"],
-    "allergens": [],
-    "goals": ["Gezond eten", "Afvallen", "Meer energie", "Geen specifiek doel"],
-    "budgetPerPerson": 5,
-    "description": "Kleurrijke kom vol groenten, quinoa en tahinidressing.",
-    "ingredients": [
-      { "name": "Quinoa", "amount": 70, "unit": "gram" },
-      { "name": "Avocado", "amount": 0.5, "unit": "stuks" },
-      { "name": "Cherrytomaatjes", "amount": 80, "unit": "gram" },
-      { "name": "Komkommer", "amount": 0.5, "unit": "stuks" },
-      { "name": "Edamame", "amount": 60, "unit": "gram" },
-      { "name": "Tahini", "amount": 1, "unit": "el" },
-      { "name": "Citroensap", "amount": 1, "unit": "el" }
-    ],
-    "steps": [
-      "Kook de quinoa.",
-      "Verdeel quinoa in een kom.",
-      "Leg alle groenten erop.",
-      "Meng tahini met citroensap en wat water tot dressing.",
-      "Drizzle de dressing erover."
-    ]
-  },
+  
   {
     "id": 15,
     "name": "Beef stir-fry met groenten",
@@ -368,75 +125,7 @@
       "Besprenkel met sojasaus en serveer."
     ]
   },
-  {
-    "id": 16,
-    "name": "Proteïne pannenkoeken",
-    "mealType": "Ontbijt",
-    "diet": ["Vegetarisch", "Geen voorkeur"],
-    "allergens": ["Gluten", "Ei", "Lactose/Melk"],
-    "goals": ["Spieropbouw", "Meer energie", "Geen specifiek doel"],
-    "budgetPerPerson": 3,
-    "description": "Luchtige pannenkoeken met extra eiwitten, perfect na een workout.",
-    "ingredients": [
-      { "name": "Havermeel", "amount": 60, "unit": "gram" },
-      { "name": "Eieren", "amount": 2, "unit": "stuks" },
-      { "name": "Kwark", "amount": 100, "unit": "gram" },
-      { "name": "Bakpoeder", "amount": 0.5, "unit": "tl" },
-      { "name": "Vanille-extract", "amount": 0.5, "unit": "tl" },
-      { "name": "Boter", "amount": 5, "unit": "gram" }
-    ],
-    "steps": [
-      "Mix alle ingrediënten tot een glad beslag.",
-      "Bak kleine pannenkoekjes in boter op middelhoog vuur.",
-      "Serveer met fruit of honing."
-    ]
-  },
-  {
-    "id": 17,
-    "name": "Caprese salade",
-    "mealType": "Snacks",
-    "diet": ["Vegetarisch", "Geen voorkeur", "Koolhydraatarm", "Suikervrij"],
-    "allergens": ["Lactose/Melk"],
-    "goals": ["Gezond eten", "Afvallen", "Geen specifiek doel"],
-    "budgetPerPerson": 4,
-    "description": "Klassieke Italiaanse snack met tomaat, mozzarella en basilicum.",
-    "ingredients": [
-      { "name": "Tomaten", "amount": 2, "unit": "stuks" },
-      { "name": "Mozzarella", "amount": 125, "unit": "gram" },
-      { "name": "Verse basilicum", "amount": 10, "unit": "blaadjes" },
-      { "name": "Olijfolie", "amount": 2, "unit": "el" },
-      { "name": "Balsamicoazijn", "amount": 1, "unit": "el" }
-    ],
-    "steps": [
-      "Snijd tomaten en mozzarella in plakken.",
-      "Leg afwisselend op een bord.",
-      "Leg basilicumblaadjes ertussen.",
-      "Besprenkel met olijfolie en balsamico."
-    ]
-  },
-  {
-    "id": 18,
-    "name": "Noten-dadel energieballen",
-    "mealType": "Snacks",
-    "diet": ["Vegan", "Vegetarisch", "Geen voorkeur"],
-    "allergens": ["Noten/Pinda"],
-    "goals": ["Meer energie", "Spieropbouw", "Geen specifiek doel"],
-    "budgetPerPerson": 2,
-    "description": "No-bake energieballen van dadels, havermout en noten.",
-    "ingredients": [
-      { "name": "Dadels", "amount": 150, "unit": "gram" },
-      { "name": "Havermout", "amount": 80, "unit": "gram" },
-      { "name": "Amandelen", "amount": 60, "unit": "gram" },
-      { "name": "Cacaopoeder", "amount": 1, "unit": "el" },
-      { "name": "Kokosrasp", "amount": 2, "unit": "el" }
-    ],
-    "steps": [
-      "Blend dadels en amandelen in een foodprocessor.",
-      "Meng met havermout en cacao.",
-      "Rol tot balletjes en wentel door kokosrasp.",
-      "Leg 30 min in de koelkast."
-    ]
-  },
+
   {
     "id": 19,
     "name": "Gegrilde groenteschotel",
@@ -461,47 +150,7 @@
       "Rooster 25 minuten tot goudbruin."
     ]
   },
-  {
-    "id": 20,
-    "name": "Cottage cheese met fruit",
-    "mealType": "Ontbijt",
-    "diet": ["Vegetarisch", "Geen voorkeur", "Koolhydraatarm", "Suikervrij"],
-    "allergens": ["Lactose/Melk"],
-    "goals": ["Spieropbouw", "Afvallen", "Gezond eten", "Geen specifiek doel"],
-    "budgetPerPerson": 3,
-    "description": "Eiwitrijke cottage cheese met vers fruit, klaar in 2 minuten.",
-    "ingredients": [
-      { "name": "Cottage cheese", "amount": 200, "unit": "gram" },
-      { "name": "Aardbeien", "amount": 80, "unit": "gram" },
-      { "name": "Bosvruchten", "amount": 50, "unit": "gram" },
-      { "name": "Honing", "amount": 1, "unit": "tl" }
-    ],
-    "steps": [
-      "Schep de cottage cheese in een kom.",
-      "Leg het fruit erop.",
-      "Besprenkel met honing."
-    ]
-  },
-  {
-    "id": 21,
-    "name": "Pindakaas-banaan rijstwafels",
-    "mealType": "Snacks",
-    "diet": ["Vegan", "Vegetarisch", "Geen voorkeur"],
-    "allergens": ["Noten/Pinda"],
-    "goals": ["Meer energie", "Geen specifiek doel"],
-    "budgetPerPerson": 2,
-    "description": "Simpele snack van rijstwafels met pindakaas en banaan.",
-    "ingredients": [
-      { "name": "Rijstwafels", "amount": 3, "unit": "stuks" },
-      { "name": "Pindakaas", "amount": 2, "unit": "el" },
-      { "name": "Banaan", "amount": 1, "unit": "stuks" }
-    ],
-    "steps": [
-      "Smeer pindakaas op de rijstwafels.",
-      "Leg plakjes banaan erop.",
-      "Direct serveren."
-    ]
-  },
+ 
   {
     "id": 22,
     "name": "Vegetarische lasagne",
@@ -526,74 +175,7 @@
       "Afdekken met kaas en 35 min bakken."
     ]
   },
-  {
-    "id": 23,
-    "name": "Groentesoep",
-    "mealType": "Lunch",
-    "diet": ["Vegan", "Vegetarisch", "Geen voorkeur", "Suikervrij"],
-    "allergens": [],
-    "goals": ["Afvallen", "Gezond eten", "Geen specifiek doel"],
-    "budgetPerPerson": 2,
-    "description": "Lichte en voedzame groentesoep vol vitaminen.",
-    "ingredients": [
-      { "name": "Wortel", "amount": 2, "unit": "stuks" },
-      { "name": "Prei", "amount": 1, "unit": "stuks" },
-      { "name": "Aardappel", "amount": 1, "unit": "stuks" },
-      { "name": "Groentebouillon", "amount": 1000, "unit": "ml" },
-      { "name": "Peterselie", "amount": 1, "unit": "el" }
-    ],
-    "steps": [
-      "Snijd alle groenten in blokjes.",
-      "Kook de bouillon op en voeg groenten toe.",
-      "Kook 20 minuten op laag vuur.",
-      "Serveer met peterselie."
-    ]
-  },
-  {
-    "id": 24,
-    "name": "Griekse yoghurt met granola",
-    "mealType": "Ontbijt",
-    "diet": ["Vegetarisch", "Geen voorkeur"],
-    "allergens": ["Gluten", "Lactose/Melk", "Noten/Pinda"],
-    "goals": ["Gezond eten", "Meer energie", "Geen specifiek doel"],
-    "budgetPerPerson": 3,
-    "description": "Romige yoghurt met knapperige granola en honing.",
-    "ingredients": [
-      { "name": "Griekse yoghurt", "amount": 200, "unit": "gram" },
-      { "name": "Granola", "amount": 50, "unit": "gram" },
-      { "name": "Honing", "amount": 1, "unit": "el" },
-      { "name": "Verse bessen", "amount": 60, "unit": "gram" }
-    ],
-    "steps": [
-      "Schep de yoghurt in een kom.",
-      "Voeg granola en bessen toe.",
-      "Besprenkel met honing."
-    ]
-  },
-  {
-    "id": 25,
-    "name": "Kip Caesar wrap",
-    "mealType": "Lunch",
-    "diet": ["Geen voorkeur"],
-    "allergens": ["Gluten", "Ei", "Lactose/Melk"],
-    "goals": ["Spieropbouw", "Gezond eten", "Geen specifiek doel"],
-    "budgetPerPerson": 5,
-    "description": "Lekkere wrap met gegrilde kip, romaine en Caesardressing.",
-    "ingredients": [
-      { "name": "Kipfilet", "amount": 120, "unit": "gram" },
-      { "name": "Wrap (tarwe)", "amount": 1, "unit": "stuks" },
-      { "name": "Romaine sla", "amount": 50, "unit": "gram" },
-      { "name": "Parmezaan", "amount": 20, "unit": "gram" },
-      { "name": "Caesardressing", "amount": 2, "unit": "el" },
-      { "name": "Croutons", "amount": 20, "unit": "gram" }
-    ],
-    "steps": [
-      "Gril de kipfilet en snijd in reepjes.",
-      "Leg sla, kip en croutons op de wrap.",
-      "Besprenkel met dressing en parmezaan.",
-      "Rol de wrap strak op."
-    ]
-  },
+ 
    {
     "id": 102,
     "name": "Klassieke kalkoenboterham",
