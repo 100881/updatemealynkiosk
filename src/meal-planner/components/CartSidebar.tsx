@@ -1,5 +1,4 @@
 import { useCart } from "../context/CartContext"
-import { useState } from "react"
 
 interface Props {
   mealType?: string
@@ -8,7 +7,6 @@ interface Props {
 export default function CartSidebar({ mealType }: Props) {
   const { cart, removeItem } = useCart()
 
-  // Filter: bij Avondeten alleen ingrediënten van geselecteerde recepten
   const displayedItems =
     mealType === "Avondeten" ? cart.filter((i) => i.id.includes("-")) : cart
 

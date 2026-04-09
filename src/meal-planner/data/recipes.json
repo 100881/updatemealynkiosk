@@ -1,23 +1,24 @@
 [
 
-  {
-    "id": 2,
-    "name": "Kipfilet met rijst en broccoli",
-    "mealType": "Avondeten",
-    "diet": ["Geen voorkeur", "Koolhydraatarm"],
-    "allergens": [],
-    "goals": ["Spieropbouw", "Gezond eten", "Geen specifiek doel"],
-    "budgetPerPerson": 5,
-    "description": "Eenvoudige en voedzame maaltijd met kip, rijst en gestoomde broccoli.",
-    "ingredients": [
-     { "name": "Kipfilet", "amount": 150, "unit": "gram", "image": "./assets/kipfilet.jpg" },
-    { "name": "Witte rijst", "amount": 75, "unit": "gram", "image": "./assets/rijst.jpg" },
-    { "name": "Broccoli", "amount": 150, "unit": "gram", "image": "./assets/broccoli.jpg" },
+{
+  "id": 2,
+  "name": "Kipfilet met rijst en broccoli",
+  "mealType": "Avondeten",
+  "diet": ["Geen voorkeur", "Koolhydraatarm"],
+  "allergens": [],
+  "goals": ["Spieropbouw", "Gezond eten", "Geen specifiek doel"],
+  "budgetPerPerson": 5,
+  "image": "./assets/kipfiletrijstenbroccoli.jpeg",
+  "description": "Eenvoudige en voedzame maaltijd met kip, rijst en gestoomde broccoli.",
+  "ingredients": [
+    { "name": "Kipfilet", "amount": 150, "unit": "gram", "image": "./assets/kipfilet.jpeg" },
+    { "name": "Witte rijst", "amount": 75, "unit": "gram", "image": "./assets/witterijst.jpeg" },
+    { "name": "Broccoli", "amount": 150, "unit": "gram", "image": "./assets/broccoli.jpeg" },
     { "name": "Olijfolie", "amount": 1, "unit": "el", "image": "./assets/olijfolie.png" },
-    { "name": "Knoflookpoeder", "amount": 1, "unit": "tl", "image": "./assets/knoflookpoeder.jpg" },
-    { "name": "Zout en peper", "amount": 1, "unit": "naar smaak", "image": "./assets/zout-peper.jpg" }
-    ]
-  },
+    { "name": "Knoflookpoeder", "amount": 1, "unit": "tl", "image": "./assets/knoflookpoeder.jpeg" },
+    { "name": "Zout en peper", "amount": 1, "unit": "naar smaak", "image": "./assets/zout-en-peper.jpeg" }
+  ]
+},
 
   {
     "id": 6,
