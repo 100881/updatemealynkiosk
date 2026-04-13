@@ -9,6 +9,7 @@ interface Props {
   answers: Answers
   onReset?: () => void
   onAddMore?: () => void
+  onBack?: () => void
 }
 
 interface CartItem {
@@ -32,7 +33,7 @@ interface Package {
   name: string
   image: string
   price: number
-  products: string[]
+  products: { name: string; image: string }[]
   meal_type: string
 }
 
@@ -47,8 +48,8 @@ type Phase = "pakket" | "select" | "list"
 
 const PACKAGE_MEAL_TYPES = ["Ontbijt", "Lunch", "Snacks"]
 
-export default function MealScreen({ answers, onReset, onAddMore }: Props) {
-  const { addItem, removeItem, cart } = useCart()
+export default function MealScreen({ answers, onReset, onAddMore, onBack }: Props) {
+  const { addItem, removeItem, cart, totalPrice } = useCart()
   const [recipesCart, setRecipesCart] = useState<RecipeCart[]>([])
   const [packages, setPackages] = useState<Package[]>([])
   const [selectedPackage, setSelectedPackage] = useState<Package | null>(null)
@@ -104,12 +105,13 @@ export default function MealScreen({ answers, onReset, onAddMore }: Props) {
       const recipeCarts: RecipeCart[] = matchedRecipes.map((recipe: any) => {
         const ingredients: CartItem[] = recipe.ingredients.map((ing: any, index: number) => {
           const priceEntry = (ingredientPrices as any)[ing.name] || { price: 0, image: FALLBACK_IMAGE }
+          const totalIngredientPrice = parseFloat((priceEntry.price * persons).toFixed(2))
           return {
             id: `${recipe.id}-${ing.name}-${index}`,
             name: ing.name,
-            price: priceEntry.price,
+            price: totalIngredientPrice,
             image: safeImage(ing.image || priceEntry.image),
-            quantity: parseFloat((ing.amount * persons).toFixed(1)),
+            quantity: 1,
           }
         })
         return {
@@ -125,26 +127,23 @@ export default function MealScreen({ answers, onReset, onAddMore }: Props) {
 
   const handleSelectPackage = (pkg: Package) => {
     setSelectedPackage(pkg)
-
-    const pkgProducts: CartItem[] = pkg.products.map((productName, i) => {
+    const pkgProducts: CartItem[] = pkg.products.map((product, i) => {
       const found = (productsData as any[]).find(
-        (p) => p.name.toLowerCase() === productName.toLowerCase()
+        (p) => p.name.toLowerCase() === product.name.toLowerCase()
       ) || (productsData as any[]).find(
         (p) =>
-          p.name.toLowerCase().includes(productName.toLowerCase()) ||
-          productName.toLowerCase().includes(p.name.toLowerCase())
+          p.name.toLowerCase().includes(product.name.toLowerCase()) ||
+          product.name.toLowerCase().includes(p.name.toLowerCase())
       )
-
       return {
         id: found ? found.id.toString() : `pkg-${pkg.id}-${i}`,
-        name: productName,
+        name: product.name,
         price: found ? found.price : 0,
-        image: found ? safeImage(found.image) : FALLBACK_IMAGE,
+        image: safeImage(product.image || found?.image),
         quantity: 1,
         brand: found?.brand || "",
       }
     })
-
     pkgProducts.forEach((item) => addItem(item))
     setPhase("list")
   }
@@ -185,7 +184,6 @@ export default function MealScreen({ answers, onReset, onAddMore }: Props) {
     setPhase("list")
   }
 
-  const totalPrice = cart.reduce((sum, item) => sum + item.price * item.quantity, 0)
   const budget = answers.budget ? parseFloat(answers.budget) : null
   const overBudget = budget !== null && totalPrice > budget
 
@@ -280,7 +278,9 @@ export default function MealScreen({ answers, onReset, onAddMore }: Props) {
       <div style={{ fontFamily: "sans-serif", maxWidth: 480, margin: "0 auto" }}>
         <div style={headerStyle}>
           <div>
-            <h2 style={{ margin: 0, fontSize: "1.1rem" }}>Selecteer {answers.mealType.toLowerCase()}pakket</h2>
+            <h2 style={{ margin: 0, fontSize: "1.1rem" }}>
+              Selecteer {answers.mealType.toLowerCase()}pakket
+            </h2>
             <p style={{ margin: 0, fontSize: "0.85rem", color: "#666" }}>
               Selecteer 1 {mealLabel[answers.mealType] || answers.mealType.toLowerCase()}pakket
             </p>
@@ -323,6 +323,19 @@ export default function MealScreen({ answers, onReset, onAddMore }: Props) {
               </div>
             </div>
           ))}
+        </div>
+
+        <div style={{ padding: "20px", marginTop: 8 }}>
+          <button
+            onClick={() => onBack?.()}
+            style={{
+              width: "100%", padding: "12px", border: "none",
+              borderRadius: 12, backgroundColor: "#2D6A4F",
+              color: "white", fontWeight: 700, fontSize: "1rem", cursor: "pointer",
+            }}
+          >
+            ← Terug
+          </button>
         </div>
       </div>
     )
