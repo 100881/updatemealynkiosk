@@ -2,11 +2,12 @@ import { useState } from "react"
 import WelcomeScreen from "./meal-planner/components/WelcomeScreen"
 import QuestionScreen from "./meal-planner/components/QuestionScreen"
 import MealScreen from "./meal-planner/components/MealScreen"
+import CheckoutScreen from "./meal-planner/components/CheckoutScreen"
 import type { Answers } from "./meal-planner/utils/matchRecipes"
 import { CartProvider } from "./meal-planner/context/CartContext"
 
 export default function App() {
-  const [screen, setScreen] = useState<"welcome" | "questions" | "meal">("welcome")
+  const [screen, setScreen] = useState<"welcome" | "questions" | "meal" | "checkout">("welcome")
   const [answers, setAnswers] = useState<Answers | null>(null)
 
   return (
@@ -27,11 +28,11 @@ export default function App() {
           <MealScreen
             answers={answers}
             onAddMore={() => setScreen("questions")}
-            onReset={() => {
-              setAnswers(null)
-              setScreen("welcome")
-            }}
+            onReset={() => setScreen("checkout")}  // ← was: setScreen("welcome")
           />
+        )}
+        {screen === "checkout" && (
+          <CheckoutScreen onBack={() => setScreen("meal")} />
         )}
       </div>
     </CartProvider>

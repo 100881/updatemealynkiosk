@@ -27,6 +27,19 @@ const answerKeys: (keyof Answers)[] = [
   "mealType",
 ]
 
+const MEAL_IMAGES: Record<string, string> = {
+  Avondeten: "/mealyn/assets/avondeten.png",
+  Lunch: "/mealyn/assets/lunch.png",
+  Ontbijt: "/mealyn/assets/ontbijt.png",
+  Snacks: "/mealyn/assets/snacks.png",
+}
+
+const FALLBACK_IMAGE = "/testimg.jpg"
+const handleImgError = (e: React.SyntheticEvent<HTMLImageElement>) => {
+  const target = e.currentTarget
+  if (target.src !== window.location.origin + FALLBACK_IMAGE) target.src = FALLBACK_IMAGE
+}
+
 export default function QuestionScreen({ onComplete }: Props) {
   const [index, setIndex] = useState(0)
   const [answers, setAnswers] = useState<Partial<Answers>>({
@@ -41,6 +54,7 @@ export default function QuestionScreen({ onComplete }: Props) {
 
   const key = answerKeys[index]
   const isMulti = ["allergy", "diet", "goal"].includes(key)
+  const isMealType = key === "mealType"
   const isVertical = key === "budget"
   const question = questions[index]
 
@@ -48,13 +62,13 @@ export default function QuestionScreen({ onComplete }: Props) {
     if (digit === "←") {
       const updated = pinValue.slice(0, -1)
       setPinValue(updated)
-      setAnswers({ ...answers, budget: updated })
+      setAnswers(prev => ({ ...prev, budget: updated }))
       return
     }
     if (pinValue.length >= 5) return
     const updated = pinValue + digit
     setPinValue(updated)
-    setAnswers({ ...answers, budget: updated })
+    setAnswers(prev => ({ ...prev, budget: updated }))
   }
 
   const handleChoice = (option: string) => {
@@ -62,7 +76,7 @@ export default function QuestionScreen({ onComplete }: Props) {
       setShowPinpad(true)
       setSingleSelected(option)
       setPinValue("")
-      setAnswers({ ...answers, budget: "" })
+      setAnswers(prev => ({ ...prev, budget: "" }))
       return
     }
 
@@ -71,32 +85,39 @@ export default function QuestionScreen({ onComplete }: Props) {
       setPinValue("")
       const numericValue = option.replace(/[^0-9]/g, "")
       setSingleSelected(option)
-      setAnswers({ ...answers, budget: numericValue })
+      setAnswers(prev => ({ ...prev, budget: numericValue }))
       return
     }
 
-    if (isMulti) {
+    if (isMulti || isMealType) {
       if (option.startsWith("Geen")) {
         setMulti([option])
-        setAnswers({ ...answers, [key]: [option] })
+        setAnswers(prev => ({ ...prev, [key]: [option] }))
         return
       }
       const updatedMulti = multi.includes(option)
         ? multi.filter((o) => o !== option)
         : [...multi, option]
       setMulti(updatedMulti)
-      setAnswers({ ...answers, [key]: updatedMulti })
+      setAnswers(prev => ({ ...prev, [key]: updatedMulti }))
       return
     }
 
     setSingleSelected(option)
-    setAnswers({ ...answers, [key]: option })
+    setAnswers(prev => ({ ...prev, [key]: option }))
   }
 
   const nextQuestion = () => {
-    const updatedAnswers = isMulti
-      ? { ...answers, [key]: multi }
-      : { ...answers, [key]: key === "budget" && showPinpad ? pinValue : singleSelected }
+    // FIX: voor budget altijd de al-genormaliseerde numerieke waarde gebruiken
+    // uit answers, niet singleSelected (die bevat de display-tekst zoals "€ 50,-")
+    const finalAnswers: Partial<Answers> = {
+      ...answers,
+      [key]: isMulti || isMealType
+        ? multi
+        : key === "budget"
+        ? (showPinpad ? pinValue : answers.budget ?? "")
+        : singleSelected,
+    }
 
     setMulti([])
     setSingleSelected(null)
@@ -104,8 +125,9 @@ export default function QuestionScreen({ onComplete }: Props) {
     setPinValue("")
 
     if (index === questions.length - 1) {
-      onComplete(updatedAnswers as Answers)
+      onComplete(finalAnswers as Answers)
     } else {
+      setAnswers(finalAnswers)
       setIndex(index + 1)
     }
   }
@@ -119,7 +141,7 @@ export default function QuestionScreen({ onComplete }: Props) {
     setIndex(index - 1)
   }
 
-  const canProceed = isMulti
+  const canProceed = isMulti || isMealType
     ? multi.length > 0
     : key === "budget" && showPinpad
     ? pinValue.length > 0
@@ -165,7 +187,13 @@ export default function QuestionScreen({ onComplete }: Props) {
         />
       </div>
 
-      <h2 style={{ marginBottom: 20 }}>{question.question}</h2>
+      <h2 style={{ marginBottom: 4 }}>{question.question}</h2>
+
+      {isMealType && (
+        <p style={{ marginTop: 0, marginBottom: 16, fontSize: "0.9rem", color: "#666" }}>
+          Je kunt meerdere opties selecteren.
+        </p>
+      )}
 
       {showPinpad ? (
         <div>
@@ -225,6 +253,78 @@ export default function QuestionScreen({ onComplete }: Props) {
               ← Terug naar opties
             </button>
           </div>
+        </div>
+      ) : isMealType ? (
+        <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+          {question.options.map((opt) => {
+            const isSelected = multi.includes(opt)
+            return (
+              <div
+                key={opt}
+                onClick={() => handleChoice(opt)}
+                style={{
+                  position: "relative",
+                  borderRadius: 12,
+                  overflow: "hidden",
+                  cursor: "pointer",
+                  border: isSelected ? "3px solid #2D6A4F" : "3px solid transparent",
+                  height: 90,
+                }}
+              >
+                <img
+                  src={MEAL_IMAGES[opt] || FALLBACK_IMAGE}
+                  alt={opt}
+                  onError={handleImgError}
+                  style={{
+                    width: "100%",
+                    height: "100%",
+                    objectFit: "cover",
+                    display: "block",
+                  }}
+                />
+                <div style={{
+                  position: "absolute",
+                  inset: 0,
+                  background: "rgba(0,0,0,0.25)",
+                }} />
+                <div style={{
+                  position: "absolute",
+                  top: 10,
+                  left: 10,
+                  width: 20,
+                  height: 20,
+                  borderRadius: 4,
+                  border: "2px solid white",
+                  backgroundColor: isSelected ? "#2D6A4F" : "rgba(255,255,255,0.3)",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}>
+                  {isSelected && (
+                    <span style={{ color: "white", fontSize: 13, lineHeight: 1, fontWeight: 700 }}>✓</span>
+                  )}
+                </div>
+                <div style={{
+                  position: "absolute",
+                  inset: 0,
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}>
+                  <span style={{
+                    backgroundColor: "rgba(255,255,255,0.88)",
+                    color: "#1A1A18",
+                    fontWeight: 600,
+                    fontSize: "1rem",
+                    padding: "5px 18px",
+                    borderRadius: 20,
+                  }}>
+                    {opt}
+                  </span>
+                </div>
+              </div>
+            )
+          })}
         </div>
       ) : (
         <div style={{

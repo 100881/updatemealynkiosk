@@ -37,11 +37,18 @@ interface Package {
   meal_type: string
 }
 
-const FALLBACK_IMAGE = "/testimg.jpg"
+const FALLBACK_IMAGE = "/assets/klassiek.png"
 const safeImage = (img?: string) => (img && img.trim() !== "" ? img : FALLBACK_IMAGE)
 const handleImgError = (e: React.SyntheticEvent<HTMLImageElement>) => {
   const target = e.currentTarget
   if (target.src !== window.location.origin + FALLBACK_IMAGE) target.src = FALLBACK_IMAGE
+}
+
+const packageImages: Record<string, string> = {
+  "Boterham Klassiek": "/mealyn/assets/klassiek.png",
+  "Zoet & Hartig": "/mealyn/assets/klassiek.png",
+  "Gezond Belegd": "/mealyn/assets/klassiek.png",
+  "Mix Pakket": "/mealyn/assets/klassiek.png",
 }
 
 type Phase = "pakket" | "select" | "list"
@@ -56,8 +63,13 @@ export default function MealScreen({ answers, onReset, onAddMore, onBack }: Prop
   const [cartProducts] = useState<CartItem[]>([])
   const [selectedProducts, setSelectedProducts] = useState<{ [key: string]: boolean }>({})
   const [selectedRecipeIds, setSelectedRecipeIds] = useState<string[]>([])
+
+  const mealTypes = Array.isArray(answers.mealType) ? answers.mealType : [answers.mealType]
+  const [currentMealTypeIndex, setCurrentMealTypeIndex] = useState(0)
+  const activeMealType = mealTypes[currentMealTypeIndex]
+
   const [phase, setPhase] = useState<Phase>(
-    PACKAGE_MEAL_TYPES.includes(answers.mealType) ? "pakket" : "select"
+    PACKAGE_MEAL_TYPES.includes(mealTypes[0]) ? "pakket" : "select"
   )
 
   const maxRecipes = answers.days
@@ -71,11 +83,11 @@ export default function MealScreen({ answers, onReset, onAddMore, onBack }: Prop
   }
 
   useEffect(() => {
-    if (!answers.mealType) return
+    if (!activeMealType) return
 
-    if (PACKAGE_MEAL_TYPES.includes(answers.mealType)) {
+    if (PACKAGE_MEAL_TYPES.includes(activeMealType)) {
       const matched = (productsData as any[]).filter((p) => {
-        if (p.meal_type !== answers.mealType) return false
+        if (p.meal_type !== activeMealType) return false
         if (!p.package) return false
         if (answers.diet.length && !answers.diet.includes("Geen voorkeur") && !answers.diet.some((d: string) => p.diet.includes(d))) return false
         if (answers.allergy.length && !answers.allergy.includes("Geen allergieën") && answers.allergy.some((a: string) => p.allergens.includes(a))) return false
@@ -85,7 +97,7 @@ export default function MealScreen({ answers, onReset, onAddMore, onBack }: Prop
       setPackages(matched.map((p: any) => ({
         id: p.id.toString(),
         name: p.name,
-        image: safeImage(p.image),
+        image: packageImages[p.name] || safeImage(p.image),
         price: p.price,
         products: p.products || [],
         meal_type: p.meal_type,
@@ -93,7 +105,7 @@ export default function MealScreen({ answers, onReset, onAddMore, onBack }: Prop
       return
     }
 
-    if (answers.mealType === "Avondeten") {
+    if (activeMealType === "Avondeten") {
       const persons = parseInt(answers.persons === "4+" ? "4" : answers.persons || "1")
       const matchedRecipes = (recipesData as any[]).filter((r) => {
         if (r.mealType !== "Avondeten") return false
@@ -123,7 +135,20 @@ export default function MealScreen({ answers, onReset, onAddMore, onBack }: Prop
       })
       setRecipesCart(recipeCarts)
     }
-  }, [answers])
+  }, [activeMealType])
+
+  const goToNextMealType = () => {
+    const nextIndex = currentMealTypeIndex + 1
+    if (nextIndex < mealTypes.length) {
+      setCurrentMealTypeIndex(nextIndex)
+      const nextMeal = mealTypes[nextIndex]
+      setSelectedPackage(null)
+      setSelectedRecipeIds([])
+      setPhase(PACKAGE_MEAL_TYPES.includes(nextMeal) ? "pakket" : "select")
+    } else {
+      setPhase("list")
+    }
+  }
 
   const handleSelectPackage = (pkg: Package) => {
     setSelectedPackage(pkg)
@@ -145,7 +170,7 @@ export default function MealScreen({ answers, onReset, onAddMore, onBack }: Prop
       }
     })
     pkgProducts.forEach((item) => addItem(item))
-    setPhase("list")
+    goToNextMealType()
   }
 
   const toggleRecipe = (recipe: RecipeCart) => {
@@ -161,7 +186,7 @@ export default function MealScreen({ answers, onReset, onAddMore, onBack }: Prop
     recipesCart
       .filter((r) => selectedRecipeIds.includes(r.id))
       .forEach((recipe) => recipe.ingredients.forEach((ing) => addItem(ing)))
-    setPhase("list")
+    goToNextMealType()
   }
 
   const toggleSelectProduct = (id: string) => {
@@ -181,7 +206,7 @@ export default function MealScreen({ answers, onReset, onAddMore, onBack }: Prop
     cartProducts.forEach((item) => {
       if (selectedProducts[item.id]) addItem(item)
     })
-    setPhase("list")
+    goToNextMealType()
   }
 
   const budget = answers.budget ? parseFloat(answers.budget) : null
@@ -196,6 +221,7 @@ export default function MealScreen({ answers, onReset, onAddMore, onBack }: Prop
     marginBottom: 16,
   }
 
+  // ── BOODSCHAPPENLIJST ──────────────────────────────────────────────
   if (phase === "list") {
     return (
       <div style={{ fontFamily: "sans-serif", maxWidth: 480, margin: "0 auto" }}>
@@ -212,7 +238,7 @@ export default function MealScreen({ answers, onReset, onAddMore, onBack }: Prop
                 display: "flex", alignItems: "center", justifyContent: "center",
               }}
             >+</button>
-            <img src="/mealyn-logo.png" alt="Mealyn" style={{ height: 32 }} onError={handleImgError} />
+            <img src="/mealyn/assets/mealynlogo.png" alt="Mealyn" style={{ height: 32 }} onError={handleImgError} />
           </div>
         </div>
 
@@ -273,56 +299,68 @@ export default function MealScreen({ answers, onReset, onAddMore, onBack }: Prop
     )
   }
 
+  // ── PAKKET SELECTIE ────────────────────────────────────────────────
   if (phase === "pakket") {
     return (
       <div style={{ fontFamily: "sans-serif", maxWidth: 480, margin: "0 auto" }}>
         <div style={headerStyle}>
           <div>
             <h2 style={{ margin: 0, fontSize: "1.1rem" }}>
-              Selecteer {answers.mealType.toLowerCase()}pakket
+              Selecteer {activeMealType.toLowerCase()}pakket
             </h2>
             <p style={{ margin: 0, fontSize: "0.85rem", color: "#666" }}>
-              Selecteer 1 {mealLabel[answers.mealType] || answers.mealType.toLowerCase()}pakket
+              Selecteer 1 {mealLabel[activeMealType] || activeMealType.toLowerCase()}pakket
             </p>
           </div>
-          <img src="/mealyn-logo.png" alt="Mealyn" style={{ height: 32 }} onError={handleImgError} />
+          <img src="/mealyn/assets/mealynlogo.png" alt="Mealyn" style={{ height: 32 }} onError={handleImgError} />
         </div>
 
-        <div style={{ padding: "0 20px", display: "flex", flexDirection: "column", gap: 12 }}>
+        <div style={{ padding: "0 20px", display: "flex", flexDirection: "column", gap: 10 }}>
           {packages.length === 0 && (
             <p style={{ color: "#888" }}>Geen pakketten gevonden voor jouw voorkeuren.</p>
           )}
-          {packages.map((pkg) => (
-            <div
-              key={pkg.id}
-              onClick={() => handleSelectPackage(pkg)}
-              style={{
-                display: "flex", alignItems: "center", gap: 12,
-                padding: "10px 14px", borderRadius: 12,
-                border: selectedPackage?.id === pkg.id ? "2px solid #2D6A4F" : "1px solid #ddd",
-                background: "white", cursor: "pointer",
-              }}
-            >
-              <input
-                type="radio"
-                checked={selectedPackage?.id === pkg.id}
-                onChange={() => {}}
-                style={{ accentColor: "#2D6A4F", width: 18, height: 18, flexShrink: 0 }}
-              />
-              <img
-                src={pkg.image}
-                alt={pkg.name}
-                onError={handleImgError}
-                style={{ width: 64, height: 64, objectFit: "cover", borderRadius: 8, flexShrink: 0 }}
-              />
-              <div style={{ flexGrow: 1 }}>
-                <div style={{ fontWeight: 600, fontSize: "0.95rem" }}>{pkg.name}</div>
+          {packages.map((pkg) => {
+            const isSelected = selectedPackage?.id === pkg.id
+            return (
+              <div
+                key={pkg.id}
+                onClick={() => handleSelectPackage(pkg)}
+                style={{
+                  position: "relative", borderRadius: 12, overflow: "hidden",
+                  cursor: "pointer",
+                  border: isSelected ? "3px solid #2D6A4F" : "3px solid transparent",
+                  height: 90,
+                }}
+              >
+                <img
+                  src={pkg.image} alt={pkg.name} onError={handleImgError}
+                  style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }}
+                />
+                <div style={{ position: "absolute", inset: 0, background: "rgba(0,0,0,0.25)" }} />
+                <div style={{
+                  position: "absolute", top: 10, left: 10,
+                  width: 20, height: 20, borderRadius: 4, border: "2px solid white",
+                  backgroundColor: isSelected ? "#2D6A4F" : "rgba(255,255,255,0.3)",
+                  display: "flex", alignItems: "center", justifyContent: "center",
+                }}>
+                  {isSelected && (
+                    <span style={{ color: "white", fontSize: 13, lineHeight: 1, fontWeight: 700 }}>✓</span>
+                  )}
+                </div>
+                <div style={{
+                  position: "absolute", inset: 0,
+                  display: "flex", alignItems: "center", justifyContent: "center",
+                }}>
+                  <span style={{
+                    backgroundColor: "rgba(255,255,255,0.88)", color: "#1A1A18",
+                    fontWeight: 600, fontSize: "1rem", padding: "5px 18px", borderRadius: 20,
+                  }}>
+                    {pkg.name} — €{pkg.price.toFixed(2)}
+                  </span>
+                </div>
               </div>
-              <div style={{ fontWeight: 600, color: "#2D6A4F", flexShrink: 0 }}>
-                €{pkg.price.toFixed(2)}
-              </div>
-            </div>
-          ))}
+            )
+          })}
         </div>
 
         <div style={{ padding: "20px", marginTop: 8 }}>
@@ -341,21 +379,22 @@ export default function MealScreen({ answers, onReset, onAddMore, onBack }: Prop
     )
   }
 
+  // ── RECEPT / PRODUCT SELECTIE ──────────────────────────────────────
   return (
     <div style={{ fontFamily: "sans-serif", maxWidth: 480, margin: "0 auto" }}>
       <div style={headerStyle}>
         <div>
           <h2 style={{ margin: 0, fontSize: "1.1rem" }}>
-            {answers.mealType === "Avondeten" ? "Avondeten" : selectedPackage?.name || answers.mealType}
+            {activeMealType === "Avondeten" ? "Avondeten" : selectedPackage?.name || activeMealType}
           </h2>
           <p style={{ margin: 0, fontSize: "0.85rem", color: "#666" }}>
-            {answers.mealType === "Avondeten"
+            {activeMealType === "Avondeten"
               ? `Kies ${maxRecipes} recept${maxRecipes > 1 ? "en" : ""}`
               : "Selecteer wat je wilt toevoegen"}
           </p>
         </div>
         <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-          {PACKAGE_MEAL_TYPES.includes(answers.mealType) && (
+          {PACKAGE_MEAL_TYPES.includes(activeMealType) && (
             <button
               onClick={() => { setSelectedPackage(null); setPhase("pakket") }}
               style={{
@@ -366,20 +405,16 @@ export default function MealScreen({ answers, onReset, onAddMore, onBack }: Prop
               ← Pakket wijzigen
             </button>
           )}
-          <img src="/mealyn-logo.png" alt="Mealyn" style={{ height: 32 }} onError={handleImgError} />
+          <img src="/mealyn/assets/mealynlogo.png" alt="Mealyn" style={{ height: 32 }} onError={handleImgError} />
         </div>
       </div>
 
       {budget !== null && (
         <div style={{
-          margin: "0 20px 12px",
-          padding: "8px 14px",
-          borderRadius: 10,
+          margin: "0 20px 12px", padding: "8px 14px", borderRadius: 10,
           backgroundColor: overBudget ? "#fff0f0" : "#f0faf5",
           border: `1px solid ${overBudget ? "#ffcccc" : "#b7e4c7"}`,
-          fontSize: "0.9rem",
-          color: overBudget ? "red" : "#2D6A4F",
-          fontWeight: 600,
+          fontSize: "0.9rem", color: overBudget ? "red" : "#2D6A4F", fontWeight: 600,
         }}>
           Budget: €{budget.toFixed(2)} — Totaal: €{totalPrice.toFixed(2)}
           {overBudget && ` (€${(totalPrice - budget).toFixed(2)} over)`}
@@ -387,7 +422,7 @@ export default function MealScreen({ answers, onReset, onAddMore, onBack }: Prop
       )}
 
       <div style={{ padding: "0 20px", display: "flex", flexDirection: "column", gap: 12 }}>
-        {answers.mealType === "Avondeten" ? (
+        {activeMealType === "Avondeten" ? (
           recipesCart.length === 0 ? (
             <p style={{ color: "#888" }}>Geen recepten gevonden.</p>
           ) : (
