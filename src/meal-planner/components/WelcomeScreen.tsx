@@ -47,7 +47,7 @@ export default function WelcomeScreen({ onStart }: Props) {
 
         {/* Logo */}
         <img
-            src="./assets/mealynlogo.png"
+            src="./assets/logomealyntrans.png"
   alt="Mealyn"
   style={{
     position: 'absolute',
@@ -55,6 +55,8 @@ export default function WelcomeScreen({ onStart }: Props) {
     right: 0,
     height: '60px',
     zIndex: 3,
+    backgroundColor: 'rgba(255, 255, 255, 0.64)',
+    padding: '4px 8px',
   }}
         />
 

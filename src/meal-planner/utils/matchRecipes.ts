@@ -9,8 +9,13 @@ export interface Recipe {
   goals: string[]
   budgetPerPerson: number
   description: string
-  ingredients: { name: string; amount: number; unit: string }[]
-  steps: string[]
+  image: string
+  ingredients: {
+    name: string
+    amount: number
+    unit: string
+    image: string
+  }[]
 }
 
 export interface Answers {
@@ -33,22 +38,25 @@ export function matchRecipes(answers: Answers): Recipe[] {
       answers.allergy.length &&
       !answers.allergy.includes("Geen allergieën") &&
       answers.allergy.some((a) => r.allergens.includes(a))
-    )
+    ) {
       return false
+    }
 
     if (
       answers.diet.length &&
       !answers.diet.includes("Geen voorkeur") &&
       !answers.diet.some((d) => r.diet.includes(d))
-    )
+    ) {
       return false
+    }
 
     if (
       answers.goal.length &&
       !answers.goal.includes("Geen specifiek doel") &&
       !answers.goal.some((g) => r.goals.includes(g))
-    )
+    ) {
       return false
+    }
 
     return true
   })

@@ -35,7 +35,15 @@ export function CartProvider({ children }: { children: ReactNode }) {
   }
 
   const removeItem = (id: string) => {
-    setCart((prev) => prev.filter((i) => i.id !== id))
+    setCart((prev) => {
+      const exists = prev.find((i) => i.id === id)
+      if (exists && exists.quantity > 1) {
+        return prev.map((i) =>
+          i.id === id ? { ...i, quantity: i.quantity - 1 } : i
+        )
+      }
+      return prev.filter((i) => i.id !== id)
+    })
   }
 
   const clearCart = () => setCart([])

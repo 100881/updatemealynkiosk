@@ -108,8 +108,6 @@ export default function QuestionScreen({ onComplete }: Props) {
   }
 
   const nextQuestion = () => {
-    // FIX: voor budget altijd de al-genormaliseerde numerieke waarde gebruiken
-    // uit answers, niet singleSelected (die bevat de display-tekst zoals "€ 50,-")
     const finalAnswers: Partial<Answers> = {
       ...answers,
       [key]: isMulti || isMealType
@@ -147,64 +145,91 @@ export default function QuestionScreen({ onComplete }: Props) {
     ? pinValue.length > 0
     : singleSelected !== null
 
-  const baseButtonStyle: React.CSSProperties = {
-    padding: isVertical ? "12px 16px" : "10px",
+  const baseCardStyle: React.CSSProperties = {
+    padding: "18px 20px",
     background: "white",
-    border: "2px solid #1B4332",
-    borderRadius: isVertical ? "30px" : "10px",
-    color: "#2D6A4F",
-    fontWeight: 500,
-    fontSize: "1rem",
+    border: "2px solid #d1e8dc",
+    borderRadius: 18,
+    color: "#1A1A18",
+    fontWeight: 600,
+    fontSize: "1.2rem",
     cursor: "pointer",
-    textAlign: isVertical ? "left" : "center",
+    textAlign: "left",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "flex-start",
+    gap: 14,
+    minHeight: 62,
+    transition: "border-color 0.15s, background 0.15s",
+    width: "100%",
   }
 
-  const selectedButtonStyle: React.CSSProperties = {
-    ...baseButtonStyle,
+  const selectedCardStyle: React.CSSProperties = {
+    ...baseCardStyle,
     background: "#2D6A4F",
+    border: "2px solid #2D6A4F",
+    color: "white",
+  }
+
+  const dotBase: React.CSSProperties = {
+    width: 26,
+    height: 26,
+    borderRadius: "50%",
+    border: "2px solid #b7d9c8",
+    flexShrink: 0,
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    fontSize: 14,
+  }
+
+  const dotSelected: React.CSSProperties = {
+    ...dotBase,
+    background: "rgba(255,255,255,0.25)",
+    border: "2px solid rgba(255,255,255,0.5)",
     color: "white",
   }
 
   return (
-    <div style={{ padding: 20, fontFamily: "sans-serif", maxWidth: 480, margin: "0 auto" }}>
+    <div style={{ padding: 28, fontFamily: "sans-serif", maxWidth: 600, margin: "0 auto" }}>
 
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 16 }}>
-        <span style={{ fontSize: "0.85rem", color: "#2D6A4F", fontWeight: 600 }}>
+      {/* Header */}
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 28 }}>
+        <span style={{
+          fontSize: "0.95rem",
+          color: "white",
+          fontWeight: 700,
+          backgroundColor: "#2D6A4F",
+          padding: "5px 12px",
+          borderRadius: 6,
+        }}>
           Vraag {index + 1} van {questions.length}
         </span>
-        <img src={logo} alt="Mealyn" style={{ height: 32 }} />
+        <img src={logo} alt="Mealyn" style={{ height: 64 }} />
       </div>
 
-      <div style={{ height: 6, backgroundColor: "#e0e0e0", borderRadius: 10, marginBottom: 24 }}>
-        <div
-          style={{
-            height: "100%",
-            width: `${((index + 1) / questions.length) * 100}%`,
-            backgroundColor: "#2D6A4F",
-            borderRadius: 10,
-            transition: "width 0.3s ease",
-          }}
-        />
-      </div>
-
-      <h2 style={{ marginBottom: 4 }}>{question.question}</h2>
+      {/* Vraag */}
+      <h2 style={{ marginBottom: isMealType ? 8 : 28, fontSize: "1.6rem", fontWeight: 700, color: "#1A1A18", lineHeight: 1.3 }}>
+        {question.question}
+      </h2>
 
       {isMealType && (
-        <p style={{ marginTop: 0, marginBottom: 16, fontSize: "0.9rem", color: "#666" }}>
+        <p style={{ marginTop: 0, marginBottom: 20, fontSize: "1rem", color: "#666" }}>
           Je kunt meerdere opties selecteren.
         </p>
       )}
 
+      {/* Pinpad */}
       {showPinpad ? (
         <div>
           <div style={{
             textAlign: "center",
-            fontSize: "2.2rem",
+            fontSize: "3rem",
             fontWeight: 700,
             color: "#1B4332",
-            marginBottom: 24,
-            letterSpacing: 2,
-            minHeight: 48,
+            marginBottom: 32,
+            letterSpacing: 3,
+            minHeight: 64,
           }}>
             {pinValue ? `€ ${pinValue},-` : "€ ..."}
           </div>
@@ -212,9 +237,9 @@ export default function QuestionScreen({ onComplete }: Props) {
           <div style={{
             display: "grid",
             gridTemplateColumns: "repeat(3, 1fr)",
-            gap: 12,
-            maxWidth: 300,
-            margin: "0 auto 16px",
+            gap: 14,
+            maxWidth: 360,
+            margin: "0 auto 20px",
           }}>
             {["1","2","3","4","5","6","7","8","9","","0","←"].map((d, i) => (
               <button
@@ -222,15 +247,14 @@ export default function QuestionScreen({ onComplete }: Props) {
                 onClick={() => d !== "" && handlePinPress(d)}
                 disabled={d === ""}
                 style={{
-                  padding: "18px 0",
-                  fontSize: "1.4rem",
-                  fontWeight: 600,
-                  borderRadius: 14,
+                  padding: "22px 0",
+                  fontSize: "1.6rem",
+                  fontWeight: 700,
+                  borderRadius: 16,
                   border: d === "←" ? "2px solid #e53e3e" : "2px solid #1B4332",
                   backgroundColor: d === "" ? "transparent" : d === "←" ? "#fff0f0" : "white",
                   color: d === "←" ? "#e53e3e" : "#1B4332",
                   cursor: d === "" ? "default" : "pointer",
-                  transition: "background 0.15s",
                 }}
               >
                 {d}
@@ -242,20 +266,18 @@ export default function QuestionScreen({ onComplete }: Props) {
             <button
               onClick={() => { setShowPinpad(false); setSingleSelected(null); setPinValue("") }}
               style={{
-                background: "none",
-                border: "none",
-                color: "#2D6A4F",
-                fontSize: "0.9rem",
-                cursor: "pointer",
-                textDecoration: "underline",
+                background: "none", border: "none",
+                color: "#2D6A4F", fontSize: "1rem",
+                cursor: "pointer", textDecoration: "underline",
               }}
             >
               ← Terug naar opties
             </button>
           </div>
         </div>
+
       ) : isMealType ? (
-        <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+        <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
           {question.options.map((opt) => {
             const isSelected = multi.includes(opt)
             return (
@@ -264,60 +286,38 @@ export default function QuestionScreen({ onComplete }: Props) {
                 onClick={() => handleChoice(opt)}
                 style={{
                   position: "relative",
-                  borderRadius: 12,
+                  borderRadius: 16,
                   overflow: "hidden",
                   cursor: "pointer",
                   border: isSelected ? "3px solid #2D6A4F" : "3px solid transparent",
-                  height: 90,
+                  height: 110,
                 }}
               >
                 <img
                   src={MEAL_IMAGES[opt] || FALLBACK_IMAGE}
                   alt={opt}
                   onError={handleImgError}
-                  style={{
-                    width: "100%",
-                    height: "100%",
-                    objectFit: "cover",
-                    display: "block",
-                  }}
+                  style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }}
                 />
+                <div style={{ position: "absolute", inset: 0, background: "rgba(0,0,0,0.25)" }} />
                 <div style={{
-                  position: "absolute",
-                  inset: 0,
-                  background: "rgba(0,0,0,0.25)",
-                }} />
-                <div style={{
-                  position: "absolute",
-                  top: 10,
-                  left: 10,
-                  width: 20,
-                  height: 20,
-                  borderRadius: 4,
+                  position: "absolute", top: 12, left: 12,
+                  width: 26, height: 26, borderRadius: 6,
                   border: "2px solid white",
                   backgroundColor: isSelected ? "#2D6A4F" : "rgba(255,255,255,0.3)",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
+                  display: "flex", alignItems: "center", justifyContent: "center",
                 }}>
                   {isSelected && (
-                    <span style={{ color: "white", fontSize: 13, lineHeight: 1, fontWeight: 700 }}>✓</span>
+                    <span style={{ color: "white", fontSize: 15, lineHeight: 1, fontWeight: 700 }}>✓</span>
                   )}
                 </div>
                 <div style={{
-                  position: "absolute",
-                  inset: 0,
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
+                  position: "absolute", inset: 0,
+                  display: "flex", alignItems: "center", justifyContent: "center",
                 }}>
                   <span style={{
-                    backgroundColor: "rgba(255,255,255,0.88)",
-                    color: "#1A1A18",
-                    fontWeight: 600,
-                    fontSize: "1rem",
-                    padding: "5px 18px",
-                    borderRadius: 20,
+                    backgroundColor: "rgba(255,255,255,0.88)", color: "#1A1A18",
+                    fontWeight: 700, fontSize: "1.2rem", padding: "7px 22px", borderRadius: 24,
                   }}>
                     {opt}
                   </span>
@@ -326,38 +326,44 @@ export default function QuestionScreen({ onComplete }: Props) {
             )
           })}
         </div>
+
       ) : (
         <div style={{
           display: "grid",
-          gridTemplateColumns: isVertical ? "1fr" : "1fr 1fr",
-          gap: isVertical ? 10 : 12,
+          gridTemplateColumns: "1fr",
+          gap: 12,
         }}>
-          {question.options.map((opt) => (
-            <button
-              key={opt}
-              onClick={() => handleChoice(opt)}
-              style={
-                isMulti
-                  ? multi.includes(opt) ? selectedButtonStyle : baseButtonStyle
-                  : singleSelected === opt ? selectedButtonStyle : baseButtonStyle
-              }
-            >
-              {opt}
-            </button>
-          ))}
+          {question.options.map((opt) => {
+            const isSelected = isMulti ? multi.includes(opt) : singleSelected === opt
+            return (
+              <button
+                key={opt}
+                onClick={() => handleChoice(opt)}
+                style={isSelected ? selectedCardStyle : baseCardStyle}
+              >
+                {(isVertical || isMulti) && (
+                  <span style={isSelected ? dotSelected : dotBase}>
+                    {isSelected ? "✓" : ""}
+                  </span>
+                )}
+                {opt}
+              </button>
+            )
+          })}
         </div>
       )}
 
+      {/* Navigatie knoppen */}
       {!showPinpad && (
-        <div style={{ display: "flex", gap: 12, marginTop: 24 }}>
+        <div style={{ display: "flex", gap: 14, marginTop: 32 }}>
           <button
             onClick={goBack}
             disabled={index === 0}
             style={{
-              flex: 1, padding: "12px",
-              border: "none", borderRadius: 12,
+              flex: 1, padding: "18px",
+              border: "none", borderRadius: 16,
               backgroundColor: index === 0 ? "#ccc" : "#2D6A4F",
-              color: "white", fontWeight: 700, fontSize: "1rem",
+              color: "white", fontWeight: 700, fontSize: "1.2rem",
               cursor: index === 0 ? "not-allowed" : "pointer",
             }}
           >
@@ -367,10 +373,10 @@ export default function QuestionScreen({ onComplete }: Props) {
             onClick={nextQuestion}
             disabled={!canProceed}
             style={{
-              flex: 1, padding: "12px",
-              border: "none", borderRadius: 12,
+              flex: 1, padding: "18px",
+              border: "none", borderRadius: 16,
               backgroundColor: !canProceed ? "#ccc" : "#2D6A4F",
-              color: "white", fontWeight: 700, fontSize: "1rem",
+              color: "white", fontWeight: 700, fontSize: "1.2rem",
               cursor: !canProceed ? "not-allowed" : "pointer",
             }}
           >
@@ -380,15 +386,15 @@ export default function QuestionScreen({ onComplete }: Props) {
       )}
 
       {showPinpad && (
-        <div style={{ marginTop: 24 }}>
+        <div style={{ marginTop: 32 }}>
           <button
             onClick={nextQuestion}
             disabled={!canProceed}
             style={{
-              width: "100%", padding: "12px",
-              border: "none", borderRadius: 12,
+              width: "100%", padding: "18px",
+              border: "none", borderRadius: 16,
               backgroundColor: !canProceed ? "#ccc" : "#2D6A4F",
-              color: "white", fontWeight: 700, fontSize: "1rem",
+              color: "white", fontWeight: 700, fontSize: "1.2rem",
               cursor: !canProceed ? "not-allowed" : "pointer",
             }}
           >

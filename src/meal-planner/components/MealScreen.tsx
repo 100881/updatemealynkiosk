@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react"
+import { useState, useEffect, useRef } from "react"
 import productsData from "../data/products.json"
 import recipesData from "../data/recipes.json"
 import ingredientPrices from "../data/ingredientPrices.json"
@@ -18,7 +18,6 @@ interface CartItem {
   price: number
   image: string
   quantity: number
-  brand?: string
 }
 
 interface RecipeCart {
@@ -45,17 +44,25 @@ const handleImgError = (e: React.SyntheticEvent<HTMLImageElement>) => {
 }
 
 const packageImages: Record<string, string> = {
-  "Boterham Klassiek": "/mealyn/assets/klassiek.png",
-  "Zoet & Hartig": "/mealyn/assets/klassiek.png",
-  "Gezond Belegd": "/mealyn/assets/klassiek.png",
-  "Mix Pakket": "/mealyn/assets/klassiek.png",
+  "Traditioneel Ontbijt": "/mealyn/assets/traditioneel_ontbijt.png",
+  "Gezond Kwart Ontbijt": "/mealyn/assets/gezond_kwart_ontbijt.png",
+  "Yoghurt & Fruit Combo": "/mealyn/assets/yoghurt_fruit_combo.png",
+  "Pancake & Fruit Ontbijt": "/mealyn/assets/pancake_fruit_ontbijt.png",
+  "De Dagelijkse Lunch": "/mealyn/assets/vegan_lunch_box.png",
+  "De Fitte Lunch": "/mealyn/assets/koolhydraatarm_lunch.png",
+  "De Sterke Lunch": "/mealyn/assets/spieropbouw_lunch.png",
+  "De Verse Lunch": "/mealyn/assets/salade_lunch.png",
+  "Hartig & Chips": "/mealyn/assets/hartig_chips.png",
+  "Gezond Tussendoor": "/mealyn/assets/gezond_tussendoor.png",
+  "Zoet & Chocolade": "/mealyn/assets/zoet_chocolade.png",
+  "Eiwitrijk Snack Pakket": "/mealyn/assets/eiwitrijk_snack.png",
 }
 
-type Phase = "pakket" | "select" | "list"
+type Phase = "pakket" | "select" | "list" | "search"
 
 const PACKAGE_MEAL_TYPES = ["Ontbijt", "Lunch", "Snacks"]
 
-export default function MealScreen({ answers, onReset, onAddMore, onBack }: Props) {
+export default function MealScreen({ answers, onReset, onBack }: Props) {
   const { addItem, removeItem, cart, totalPrice } = useCart()
   const [recipesCart, setRecipesCart] = useState<RecipeCart[]>([])
   const [packages, setPackages] = useState<Package[]>([])
@@ -63,6 +70,9 @@ export default function MealScreen({ answers, onReset, onAddMore, onBack }: Prop
   const [cartProducts] = useState<CartItem[]>([])
   const [selectedProducts, setSelectedProducts] = useState<{ [key: string]: boolean }>({})
   const [selectedRecipeIds, setSelectedRecipeIds] = useState<string[]>([])
+  const [searchQuery, setSearchQuery] = useState("")
+  const [addedFeedback, setAddedFeedback] = useState<string | null>(null)
+  const searchInputRef = useRef<HTMLInputElement>(null)
 
   const mealTypes = Array.isArray(answers.mealType) ? answers.mealType : [answers.mealType]
   const [currentMealTypeIndex, setCurrentMealTypeIndex] = useState(0)
@@ -82,18 +92,53 @@ export default function MealScreen({ answers, onReset, onAddMore, onBack }: Prop
     Snacks: "snack",
   }
 
+  const allIngredients: CartItem[] = Object.entries(ingredientPrices as Record<string, { price: number; image: string }>).map(
+    ([name, data]) => ({
+      id: `ingredient-${name.toLowerCase().replace(/\s+/g, "-")}`,
+      name,
+      price: data.price,
+      image: safeImage(data.image),
+      quantity: 1,
+    })
+  )
+
+  const filteredIngredients = allIngredients.filter((item) =>
+    item.name.toLowerCase().includes(searchQuery.toLowerCase())
+  )
+
+  useEffect(() => {
+    if (phase === "search") {
+      setTimeout(() => searchInputRef.current?.focus(), 100)
+    }
+  }, [phase])
+
   useEffect(() => {
     if (!activeMealType) return
 
     if (PACKAGE_MEAL_TYPES.includes(activeMealType)) {
-      const matched = (productsData as any[]).filter((p) => {
-        if (p.meal_type !== activeMealType) return false
-        if (!p.package) return false
-        if (answers.diet.length && !answers.diet.includes("Geen voorkeur") && !answers.diet.some((d: string) => p.diet.includes(d))) return false
-        if (answers.allergy.length && !answers.allergy.includes("Geen allergieën") && answers.allergy.some((a: string) => p.allergens.includes(a))) return false
-        if (answers.goal.length && !answers.goal.includes("Geen specifiek doel") && !answers.goal.some((g: string) => p.goal.includes(g))) return false
-        return true
-      })
+     const matched = (productsData as any[]).filter((p) => {
+  if (p.meal_type !== activeMealType) return false
+  if (!p.package) return false
+
+  const allergyList = answers.allergy.includes("Geen allergieën") ? [] : answers.allergy
+  const dietList = answers.diet.includes("Geen voorkeur") ? [] : answers.diet
+  const goalList = answers.goal.includes("Geen specifiek doel") ? [] : answers.goal
+
+  if (allergyList.length > 0) {
+    if (allergyList.some((a: string) => p.allergens.includes(a))) return false
+  }
+
+  if (dietList.length > 0) {
+    if (!dietList.some((d: string) => p.diet.includes(d))) return false
+  }
+
+  if (goalList.length > 0) {
+    if (!goalList.some((g: string) => p.goal.includes(g))) return false
+  }
+
+  return true
+})
+
       setPackages(matched.map((p: any) => ({
         id: p.id.toString(),
         name: p.name,
@@ -109,17 +154,29 @@ export default function MealScreen({ answers, onReset, onAddMore, onBack }: Prop
       const persons = parseInt(answers.persons === "4+" ? "4" : answers.persons || "1")
       const matchedRecipes = (recipesData as any[]).filter((r) => {
         if (r.mealType !== "Avondeten") return false
-        if (answers.diet.length && !answers.diet.includes("Geen voorkeur") && !answers.diet.some((d: string) => r.diet.includes(d))) return false
-        if (answers.allergy.length && !answers.allergy.includes("Geen allergieën") && answers.allergy.some((a: string) => r.allergens.includes(a))) return false
-        if (answers.goal.length && !answers.goal.includes("Geen specifiek doel") && !answers.goal.some((g: string) => r.goals.includes(g))) return false
+        if (
+          answers.diet.length &&
+          !answers.diet.includes("Geen voorkeur") &&
+          !answers.diet.some((d: string) => r.diet.includes(d))
+        ) return false
+        if (
+          answers.allergy.length &&
+          !answers.allergy.includes("Geen allergieën") &&
+          answers.allergy.some((a: string) => r.allergens.includes(a))
+        ) return false
+        if (
+          answers.goal.length &&
+          !answers.goal.includes("Geen specifiek doel") &&
+          !answers.goal.some((g: string) => r.goals.includes(g))
+        ) return false
         return true
       })
       const recipeCarts: RecipeCart[] = matchedRecipes.map((recipe: any) => {
-        const ingredients: CartItem[] = recipe.ingredients.map((ing: any, index: number) => {
+        const ingredients: CartItem[] = recipe.ingredients.map((ing: any) => {
           const priceEntry = (ingredientPrices as any)[ing.name] || { price: 0, image: FALLBACK_IMAGE }
           const totalIngredientPrice = parseFloat((priceEntry.price * persons).toFixed(2))
           return {
-            id: `${recipe.id}-${ing.name}-${index}`,
+            id: `ingredient-${ing.name.toLowerCase().replace(/\s+/g, "-")}`,
             name: ing.name,
             price: totalIngredientPrice,
             image: safeImage(ing.image || priceEntry.image),
@@ -150,26 +207,62 @@ export default function MealScreen({ answers, onReset, onAddMore, onBack }: Prop
     }
   }
 
-  const handleSelectPackage = (pkg: Package) => {
+ const handleSelectPackage = (pkg: Package) => {
     setSelectedPackage(pkg)
-    const pkgProducts: CartItem[] = pkg.products.map((product, i) => {
-      const found = (productsData as any[]).find(
-        (p) => p.name.toLowerCase() === product.name.toLowerCase()
-      ) || (productsData as any[]).find(
-        (p) =>
-          p.name.toLowerCase().includes(product.name.toLowerCase()) ||
-          product.name.toLowerCase().includes(p.name.toLowerCase())
-      )
-      return {
-        id: found ? found.id.toString() : `pkg-${pkg.id}-${i}`,
-        name: product.name,
-        price: found ? found.price : 0,
-        image: safeImage(product.image || found?.image),
-        quantity: 1,
-        brand: found?.brand || "",
-      }
-    })
-    pkgProducts.forEach((item) => addItem(item))
+
+    const allergyList = answers.allergy.includes("Geen allergieën") ? [] : answers.allergy
+    const dietList = answers.diet.includes("Geen voorkeur") ? [] : answers.diet
+
+    const ALLERGEN_PRODUCT_MAP: Record<string, string[]> = {
+      "Gluten": ["Brood", "Volkoren brood", "Pancakemix", "Crackers", "Stroopwafels", "Koekjes", "Kipfilet wrap"],
+      "Lactose/Melk": ["Melk", "Kaas", "Yoghurt", "Boter", "Slagroom", "Kwark", "Feta"],
+      "Noten/Pinda": ["Notenmix", "Noten", "Amandelen", "Nootjes"],
+      "Ei": ["Ei", "Hardgekookt ei"],
+    }
+
+    const VEGAN_EXCLUDED = ["Ham", "Kaas", "Melk", "Ei", "Hardgekookt ei", "Yoghurt", "Boter", "Slagroom", "Kwark", "Feta", "Kipsalade", "Kipfilet", "Kipfilet wrap", "Tonijn", "Eiwitshake"]
+    const VEGETARIAN_EXCLUDED = ["Ham", "Kipsalade", "Kipfilet", "Kipfilet wrap", "Tonijn"]
+
+ const activeReasons = [...allergyList, ...dietList]
+
+const resolvedProducts = pkg.products.map((product: any) => {
+  const naam = product.name
+
+  const isBlocked =
+    allergyList.some((a: string) => {
+      const blocked = ALLERGEN_PRODUCT_MAP[a] || []
+      return blocked.some((b: string) => naam.toLowerCase().includes(b.toLowerCase()))
+    }) ||
+    (dietList.includes("Vegan") && VEGAN_EXCLUDED.some((e) => naam.toLowerCase().includes(e.toLowerCase()))) ||
+    (dietList.includes("Vegetarisch") && !dietList.includes("Vegan") && VEGETARIAN_EXCLUDED.some((e) => naam.toLowerCase().includes(e.toLowerCase())))
+
+  if (!isBlocked) return product
+
+  const alternative = product.alternatives?.find((alt: any) =>
+    alt.for?.some((f: string) => activeReasons.includes(f))
+  )
+
+  return alternative ? { name: alternative.name, image: alternative.image } : null
+}).filter(Boolean)
+
+const pkgProducts: CartItem[] = resolvedProducts.map((product: any, i: number) => {
+  const found = (productsData as any[]).find(
+    (p) => p.name.toLowerCase() === product.name.toLowerCase()
+  ) || (productsData as any[]).find(
+    (p) =>
+      p.name.toLowerCase().includes(product.name.toLowerCase()) ||
+      product.name.toLowerCase().includes(p.name.toLowerCase())
+  )
+  return {
+    id: found ? found.id.toString() : `pkg-${pkg.id}-${i}`,
+    name: product.name,
+    price: found ? found.price : 0,
+    image: safeImage(product.image || found?.image),
+    quantity: 1,
+  }
+})
+
+pkgProducts.forEach((item) => addItem(item))
     goToNextMealType()
   }
 
@@ -209,6 +302,12 @@ export default function MealScreen({ answers, onReset, onAddMore, onBack }: Prop
     goToNextMealType()
   }
 
+  const handleAddIngredient = (item: CartItem) => {
+    addItem(item)
+    setAddedFeedback(item.name)
+    setTimeout(() => setAddedFeedback(null), 1500)
+  }
+
   const budget = answers.budget ? parseFloat(answers.budget) : null
   const overBudget = budget !== null && totalPrice > budget
 
@@ -216,80 +315,220 @@ export default function MealScreen({ answers, onReset, onAddMore, onBack }: Prop
     display: "flex",
     justifyContent: "space-between",
     alignItems: "center",
-    padding: "12px 20px",
-    borderBottom: "1px solid #eee",
-    marginBottom: 16,
+    padding: "16px 20px 12px",
+    marginBottom: 0,
+  }
+
+  // ── ZOEK SCHERM ────────────────────────────────────────────────────
+  if (phase === "search") {
+    return (
+      <div style={{ fontFamily: "sans-serif", maxWidth: 480, margin: "0 auto", backgroundColor: "#fff", minHeight: "100vh", display: "flex", flexDirection: "column" }}>
+        <div style={{ padding: "12px 20px 12px", backgroundColor: "#fff", position: "sticky", top: 0, zIndex: 10, borderBottom: "1px solid #f0f0f0" }}>
+          <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 14 }}>
+            <button
+              onClick={() => { setPhase("list"); setSearchQuery("") }}
+              style={{
+                background: "none", border: "none",
+                cursor: "pointer", color: "#2D6A4F", padding: 0,
+                display: "flex", alignItems: "center", gap: 6,
+                fontSize: "0.95rem", fontWeight: 600,
+              }}
+            >
+              ← Terug naar boodschappenlijst
+            </button>
+            <h2 style={{ margin: 0, fontSize: "1.3rem", fontWeight: 700, color: "#1A1A18" }}>
+              Product toevoegen
+            </h2>
+            <img src="/mealyn/assets/mealynlogo.png" alt="Mealyn" style={{ height: 40, marginLeft: "auto" }} onError={handleImgError} />
+          </div>
+          <div style={{ position: "relative", width: "100%" }}>
+            <span style={{
+              position: "absolute", left: 14, top: "50%", transform: "translateY(-50%)",
+              fontSize: "1.1rem", color: "#aaa", pointerEvents: "none", zIndex: 1,
+            }}>🔍</span>
+            <input
+              ref={searchInputRef}
+              type="text"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              placeholder="Zoek een product..."
+              style={{
+                width: "100%",
+                padding: "14px 50px 14px 42px",
+                borderRadius: 14,
+                border: "2px solid #d1e8dc",
+                fontSize: "1rem",
+                outline: "none",
+                boxSizing: "border-box",
+                backgroundColor: "#f8fdf9",
+                color: "#1A1A18",
+              }}
+            />
+            {searchQuery.length > 0 && (
+              <button
+                onClick={() => setSearchQuery("")}
+                style={{
+                  position: "absolute", right: 14, top: "20%", transform: "translateY(-50%)",
+                  background: "none", border: "none", fontSize: "1rem",
+                  color: "#2D6A4F", cursor: "pointer", padding: 0, lineHeight: 1, zIndex: 2,
+                  width: 20, height: 20, display: "flex", alignItems: "center", justifyContent: "center",
+                }}
+              >✕</button>
+            )}
+          </div>
+        </div>
+
+        {addedFeedback && (
+          <div style={{
+            position: "fixed", top: 16, left: "50%", transform: "translateX(-50%)",
+            backgroundColor: "#2D6A4F", color: "white",
+            padding: "10px 22px", borderRadius: 24,
+            fontWeight: 600, fontSize: "0.95rem",
+            zIndex: 999, boxShadow: "0 4px 16px rgba(0,0,0,0.15)",
+            pointerEvents: "none",
+          }}>
+            ✓ {addedFeedback} toegevoegd
+          </div>
+        )}
+
+        <div style={{ flex: 1, overflowY: "auto", padding: "12px 16px 32px" }}>
+          {filteredIngredients.length === 0 ? (
+            <p style={{ color: "#888", textAlign: "center", marginTop: 32 }}>Geen producten gevonden.</p>
+          ) : (
+            filteredIngredients.map((item) => {
+              const inCart = cart.find((c) => c.id === item.id)
+              return (
+                <div
+                  key={item.id}
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: 12,
+                    padding: "12px 4px",
+                    borderBottom: "1px solid #f0f0f0",
+                  }}
+                >
+                  <img
+                    src={item.image}
+                    alt={item.name}
+                    onError={handleImgError}
+                    style={{ width: 52, height: 52, objectFit: "contain", borderRadius: 8, flexShrink: 0 }}
+                  />
+                  <div style={{ flexGrow: 1, minWidth: 0 }}>
+                    <div style={{ fontWeight: 600, fontSize: "0.95rem", color: "#1A1A18" }}>{item.name}</div>
+                    <div style={{ fontSize: "0.85rem", color: "#666", marginTop: 2 }}>€ {item.price.toFixed(2)}</div>
+                  </div>
+                  <button
+                    onClick={() => handleAddIngredient(item)}
+                    style={{
+                      width: 36, height: 36, borderRadius: 10,
+                      backgroundColor: inCart ? "#e8f5ee" : "#2D6A4F",
+                      color: inCart ? "#2D6A4F" : "white",
+                      border: inCart ? "2px solid #2D6A4F" : "none",
+                      fontSize: "1.3rem", cursor: "pointer",
+                      display: "flex", alignItems: "center", justifyContent: "center",
+                      fontWeight: 700, flexShrink: 0,
+                      transition: "background 0.15s",
+                    }}
+                  >
+                    +
+                  </button>
+                </div>
+              )
+            })
+          )}
+        </div>
+      </div>
+    )
   }
 
   // ── BOODSCHAPPENLIJST ──────────────────────────────────────────────
   if (phase === "list") {
     return (
-      <div style={{ fontFamily: "sans-serif", maxWidth: 480, margin: "0 auto" }}>
-        <div style={headerStyle}>
-          <h2 style={{ margin: 0, fontSize: "1.1rem" }}>Boodschappenlijst</h2>
-          <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-            <button
-              onClick={() => onAddMore?.()}
-              title="Meer toevoegen"
-              style={{
-                width: 32, height: 32, borderRadius: "50%",
-                backgroundColor: "#2D6A4F", color: "white",
-                border: "none", fontSize: "1.3rem", cursor: "pointer",
-                display: "flex", alignItems: "center", justifyContent: "center",
-              }}
-            >+</button>
-            <img src="/mealyn/assets/mealynlogo.png" alt="Mealyn" style={{ height: 32 }} onError={handleImgError} />
-          </div>
+      <div style={{ fontFamily: "sans-serif", maxWidth: 480, margin: "0 auto", backgroundColor: "#fff", minHeight: "100vh", display: "flex", flexDirection: "column" }}>
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "20px 20px 8px" }}>
+          <h2 style={{ margin: 0, fontSize: "1.5rem", fontWeight: 700, color: "#1A1A18" }}>Boodschappenlijst</h2>
+          <img src="/mealyn/assets/mealynlogo.png" alt="Mealyn" style={{ height: 75 }} onError={handleImgError} />
         </div>
 
-        <div style={{ padding: "0 20px", display: "flex", flexDirection: "column", gap: 10 }}>
-          {cart.length === 0 && <p style={{ color: "#888" }}>Je boodschappenlijst is leeg.</p>}
-          {cart.map((item) => (
-            <div key={item.id} style={{ display: "flex", alignItems: "center", gap: 12 }}>
+        <div style={{ display: "flex", justifyContent: "flex-end", padding: "4px 20px 12px" }}>
+          <button
+            onClick={() => setPhase("search")}
+            title="Product toevoegen"
+            style={{
+              width: 36, height: 36, borderRadius: 8,
+              backgroundColor: "#2D6A4F", color: "white",
+              border: "none", fontSize: "1.4rem", cursor: "pointer",
+              display: "flex", alignItems: "center", justifyContent: "center",
+              fontWeight: 700,
+            }}
+          >+</button>
+        </div>
+
+        <div style={{ flex: 1, padding: "0 16px", display: "flex", flexDirection: "column" }}>
+          {cart.length === 0 && <p style={{ color: "#888", padding: "0 4px" }}>Je boodschappenlijst is leeg.</p>}
+          {cart.map((item, index) => (
+            <div
+              key={item.id}
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: 12,
+                padding: "14px 4px",
+                borderBottom: index < cart.length - 1 ? "1px solid #f0f0f0" : "none",
+              }}
+            >
               <button
                 onClick={() => removeItem(item.id)}
                 style={{
-                  width: 26, height: 26, borderRadius: "50%",
+                  width: 28, height: 28, borderRadius: "50%",
                   backgroundColor: "#e53e3e", color: "white",
-                  border: "none", fontSize: "1.1rem", cursor: "pointer",
+                  border: "none", fontSize: "1.2rem", cursor: "pointer",
                   display: "flex", alignItems: "center", justifyContent: "center",
-                  flexShrink: 0,
+                  flexShrink: 0, lineHeight: 1,
                 }}
               >−</button>
               <img
                 src={item.image}
                 alt={item.name}
                 onError={handleImgError}
-                style={{ width: 48, height: 48, objectFit: "cover", borderRadius: 8 }}
+                style={{ width: 56, height: 56, objectFit: "contain", borderRadius: 6, flexShrink: 0 }}
               />
-              <div style={{ flexGrow: 1 }}>
-                <div style={{ fontWeight: 600, fontSize: "0.95rem" }}>{item.name}</div>
+              <div style={{ flexGrow: 1, minWidth: 0 }}>
+                <div style={{ fontWeight: 600, fontSize: "1rem", color: "#1A1A18" }}>
+                  {item.quantity > 1 && (
+                    <span style={{ color: "#2D6A4F", marginRight: 6 }}>{item.quantity}x</span>
+                  )}
+                  {item.name}
+                </div>
               </div>
-              <div style={{ fontWeight: 600 }}>€{item.price.toFixed(2)}</div>
+              <div style={{ fontWeight: 500, fontSize: "1rem", color: "#1A1A18", flexShrink: 0 }}>
+                € {(item.price * item.quantity).toFixed(2)}
+              </div>
             </div>
           ))}
         </div>
 
-        <div style={{ padding: 20, marginTop: 8 }}>
+        <div style={{ padding: "16px 20px 24px", borderTop: "1px solid #f0f0f0", marginTop: 8 }}>
           {budget !== null && (
-            <div style={{ marginBottom: 6, fontSize: "0.9rem", color: "#666" }}>
-              Budget: €{budget.toFixed(2)}
+            <div style={{ marginBottom: 4, fontSize: "0.9rem", color: "#666" }}>
+              Budget: € {budget.toFixed(2)}
             </div>
           )}
-          <div style={{ marginBottom: 12, fontWeight: 600, color: overBudget ? "red" : "#1A1A18" }}>
-            Totaal: €{totalPrice.toFixed(2)}
+          <div style={{ marginBottom: 16, fontWeight: 600, fontSize: "1rem", color: overBudget ? "red" : "#1A1A18" }}>
+            Totaal: € {totalPrice.toFixed(2)}
             {overBudget && (
               <span style={{ fontSize: "0.85rem", marginLeft: 8, color: "red" }}>
-                (€{(totalPrice - budget!).toFixed(2)} boven budget)
+                (€ {(totalPrice - budget!).toFixed(2)} boven budget)
               </span>
             )}
           </div>
           <button
             onClick={onReset}
             style={{
-              width: "100%", padding: "0.9rem", border: "none",
-              borderRadius: 12, backgroundColor: "#2D6A4F",
-              color: "white", fontWeight: 700, fontSize: "1rem", cursor: "pointer",
+              width: "100%", padding: "16px", border: "none",
+              borderRadius: 14, backgroundColor: "#2D6A4F",
+              color: "white", fontWeight: 700, fontSize: "1.1rem", cursor: "pointer",
             }}
           >
             Klaar
@@ -514,11 +753,10 @@ export default function MealScreen({ answers, onReset, onAddMore, onBack }: Prop
                   />
                   <img
                     src={item.image} alt={item.name} onError={handleImgError}
-                    style={{ width: 52, height: 52, objectFit: "cover", borderRadius: 8 }}
+                    style={{ width: 56, height: 56, objectFit: "contain", borderRadius: 8 }}
                   />
                   <div style={{ flexGrow: 1 }}>
                     <div style={{ fontWeight: 600, fontSize: "0.95rem" }}>{item.name}</div>
-                    {item.brand && <div style={{ fontSize: "0.8rem", color: "#888" }}>{item.brand}</div>}
                   </div>
                   <div style={{ fontWeight: 600, color: "#2D6A4F" }}>€{item.price.toFixed(2)}</div>
                 </div>

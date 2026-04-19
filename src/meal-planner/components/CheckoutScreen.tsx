@@ -55,43 +55,30 @@ export default function CheckoutScreen({ onBack }: Props) {
       const data = [
         ESC + "@",
         ESC + "t\x13",
-
         ESC + "a\x01",
         ESC + "E\x01",
         ESC + "!\x11",
         "MEALYN\n",
-
         ESC + "!\x00",
         ESC + "E\x00",
         "Boodschappenlijst\n",
-
         LINE,
-
         ESC + "a\x00",
-
         ...cart.map((item) =>
           line(item.name, euro(item.price * item.quantity))
         ),
-
         LINE,
-
         ESC + "E\x01",
         line("Totaal:", euro(total)),
         ESC + "E\x00",
-
         "\n",
-
         ESC + "a\x01",
         "Gegenereerd door Mealyn\n",
-
         "\n\n\n",
-
         GS + "V\x41\x00"
       ]
 
       await qz.print(config, data)
-
-      // ✅ NA PRINT: altijd naar WelcomeScreen
       window.location.href = "/"
 
     } catch (err) {
@@ -123,35 +110,38 @@ export default function CheckoutScreen({ onBack }: Props) {
       alignItems: "center",
       fontFamily: "sans-serif",
       minHeight: "100vh",
+      backgroundColor: "#ffffff",
     }}>
+
+      {/* Logo rechtsboven */}
       <div style={{
         width: "100%",
         display: "flex",
         justifyContent: "flex-end",
-        marginBottom: "2rem"
+        marginBottom: "3rem",
       }}>
-        <img src="/mealyn/assets/mealynlogo.png" alt="Mealyn" style={{ height: 36 }} />
+        <img src="/mealyn/assets/mealynlogo.png" alt="Mealyn" style={{ height: 75 }} />
       </div>
 
-      <h2 style={{
+      <p style={{
         fontSize: 22,
-        fontWeight: 700,
+        fontWeight: 600,
         textAlign: "center",
-        lineHeight: 1.4,
-        margin: "0 0 2.5rem",
-        color: "#1a1a1a",
+        lineHeight: 1.6,
+        margin: "0 0 3rem",
+        color: "#1A1A18",
       }}>
         Print je boodschappenlijst<br />
         direct uit of e-mail hem<br />
         naar jezelf.
-      </h2>
+      </p>
 
       <div style={{
         width: "100%",
         display: "flex",
         flexDirection: "column",
-        gap: 14,
-        maxWidth: 300
+        gap: 16,
+        maxWidth: 360,
       }}>
         <button onClick={handlePrint} style={btnStyle}>
           <PrintIcon /> Printen
@@ -163,20 +153,24 @@ export default function CheckoutScreen({ onBack }: Props) {
       </div>
 
       {onBack && (
-        <button
-          onClick={onBack}
-          style={{
-            marginTop: 32,
-            background: "none",
-            border: "none",
-            color: "#2D6A4F",
-            fontSize: "0.9rem",
-            cursor: "pointer",
-            textDecoration: "underline",
-          }}
-        >
-          ← Terug
-        </button>
+        <div style={{ width: "100%", maxWidth: 360, marginTop: 24 }}>
+          <button
+            onClick={onBack}
+            style={{
+              width: "100%",
+              padding: "18px",
+              border: "none",
+              borderRadius: 14,
+              backgroundColor: "#2D6A4F",
+              color: "white",
+              fontWeight: 700,
+              fontSize: "1.3rem",
+              cursor: "pointer",
+            }}
+          >
+            ← Terug
+          </button>
+        </div>
       )}
     </div>
   )
@@ -186,12 +180,12 @@ const btnStyle: React.CSSProperties = {
   display: "flex",
   alignItems: "center",
   justifyContent: "center",
-  gap: 10,
-  padding: "16px",
-  borderRadius: 12,
-  background: "#f5f5f5",
-  border: "1px solid #ddd",
-  fontSize: 16,
+  gap: 12,
+  padding: "22px",
+  borderRadius: 14,
+  background: "#ffffff",
+  border: "1px solid #e0e0e0",
+  fontSize: 20,
   fontWeight: 600,
   color: "#1a1a1a",
   cursor: "pointer",
@@ -200,8 +194,8 @@ const btnStyle: React.CSSProperties = {
 
 function PrintIcon() {
   return (
-    <svg width="20" height="20" viewBox="0 0 24 24" fill="none"
-      stroke="currentColor" strokeWidth="1.8"
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none"
+      stroke="#2D6A4F" strokeWidth="1.8"
       strokeLinecap="round" strokeLinejoin="round">
       <polyline points="6 9 6 2 18 2 18 9"/>
       <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/>
@@ -212,8 +206,8 @@ function PrintIcon() {
 
 function MailIcon() {
   return (
-    <svg width="20" height="20" viewBox="0 0 24 24" fill="none"
-      stroke="currentColor" strokeWidth="1.8"
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none"
+      stroke="#2D6A4F" strokeWidth="1.8"
       strokeLinecap="round" strokeLinejoin="round">
       <rect x="2" y="4" width="20" height="16" rx="2"/>
       <polyline points="2,4 12,13 22,4"/>
