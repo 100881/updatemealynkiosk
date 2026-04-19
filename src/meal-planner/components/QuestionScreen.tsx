@@ -290,7 +290,7 @@ export default function QuestionScreen({ onComplete }: Props) {
                   overflow: "hidden",
                   cursor: "pointer",
                   border: isSelected ? "3px solid #2D6A4F" : "3px solid transparent",
-                  height: 110,
+                  height: 135,
                 }}
               >
                 <img

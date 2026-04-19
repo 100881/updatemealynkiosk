@@ -395,7 +395,7 @@
     "image": "./assets/ovenschotelgehakt.jpg",
     "description": "Ouderwetse ovenschotel met gekruid gehakt, aardappel en kaas.",
     "ingredients": [
-      { "name": "Gehakt", "amount": 125, "unit": "gram", "image": "./assets/gehakt.jpg" },
+      { "name": "Gehakt (rund/vark)", "amount": 125, "unit": "gram", "image": "./assets/gehakt.jpg" },
       { "name": "Aardappel", "amount": 250, "unit": "gram", "image": "./assets/aardappel.jpg" },
       { "name": "Geraspte kaas", "amount": 75, "unit": "gram", "image": "./assets/geraspte_kaas.jpg" },
       { "name": "Ei", "amount": 1, "unit": "stuks", "image": "./assets/eieren.jpg" },

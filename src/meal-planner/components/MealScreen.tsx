@@ -44,18 +44,20 @@ const handleImgError = (e: React.SyntheticEvent<HTMLImageElement>) => {
 }
 
 const packageImages: Record<string, string> = {
-  "Traditioneel Ontbijt": "/mealyn/assets/traditioneel_ontbijt.png",
-  "Gezond Kwart Ontbijt": "/mealyn/assets/gezond_kwart_ontbijt.png",
+ 
+  "Traditioneel Ontbijt": "/mealyn/assets/vegan_lunch_box.png",
+  "Gezond Kwark Ontbijt": "/mealyn/assets/gezond_kwart_ontbijt.png",
   "Yoghurt & Fruit Combo": "/mealyn/assets/yoghurt_fruit_combo.png",
   "Pancake & Fruit Ontbijt": "/mealyn/assets/pancake_fruit_ontbijt.png",
-  "De Dagelijkse Lunch": "/mealyn/assets/vegan_lunch_box.png",
-  "De Fitte Lunch": "/mealyn/assets/koolhydraatarm_lunch.png",
-  "De Sterke Lunch": "/mealyn/assets/spieropbouw_lunch.png",
-  "De Verse Lunch": "/mealyn/assets/salade_lunch.png",
+  
+  "Boterham Klassiek": "/mealyn/assets/vegan_lunch_box.png",
+  "Zoet & Hartig": "/mealyn/assets/koolhydraatarm_lunch.png",
+  "Gezond Belegd": "/mealyn/assets/spieropbouw_lunch.png",
+  "Mix Pakket": "/mealyn/assets/salade_lunch.png",
+  
   "Hartig & Chips": "/mealyn/assets/hartig_chips.png",
   "Gezond Tussendoor": "/mealyn/assets/gezond_tussendoor.png",
   "Zoet & Chocolade": "/mealyn/assets/zoet_chocolade.png",
-  "Eiwitrijk Snack Pakket": "/mealyn/assets/eiwitrijk_snack.png",
 }
 
 type Phase = "pakket" | "select" | "list" | "search"
@@ -256,7 +258,7 @@ const pkgProducts: CartItem[] = resolvedProducts.map((product: any, i: number) =
   return {
     id: found ? found.id.toString() : `pkg-${pkg.id}-${i}`,
     name: product.name,
-    price: found ? found.price : 0,
+    price: (ingredientPrices as Record<string, { price: number; image: string }>)[product.name]?.price ?? 0,
     image: safeImage(product.image || found?.image),
     quantity: 1,
   }
@@ -339,7 +341,7 @@ pkgProducts.forEach((item) => addItem(item))
             <h2 style={{ margin: 0, fontSize: "1.3rem", fontWeight: 700, color: "#1A1A18" }}>
               Product toevoegen
             </h2>
-            <img src="/mealyn/assets/mealynlogo.png" alt="Mealyn" style={{ height: 40, marginLeft: "auto" }} onError={handleImgError} />
+            <img src="/mealyn/assets/mealynlogo.png" alt="Mealyn" style={{ height: 64, marginLeft: "auto" }} onError={handleImgError} />
           </div>
           <div style={{ position: "relative", width: "100%" }}>
             <span style={{
@@ -448,7 +450,7 @@ pkgProducts.forEach((item) => addItem(item))
       <div style={{ fontFamily: "sans-serif", maxWidth: 480, margin: "0 auto", backgroundColor: "#fff", minHeight: "100vh", display: "flex", flexDirection: "column" }}>
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "20px 20px 8px" }}>
           <h2 style={{ margin: 0, fontSize: "1.5rem", fontWeight: 700, color: "#1A1A18" }}>Boodschappenlijst</h2>
-          <img src="/mealyn/assets/mealynlogo.png" alt="Mealyn" style={{ height: 75 }} onError={handleImgError} />
+          <img src="/mealyn/assets/mealynlogo.png" alt="Mealyn" style={{ height: 64 }} onError={handleImgError} />
         </div>
 
         <div style={{ display: "flex", justifyContent: "flex-end", padding: "4px 20px 12px" }}>
@@ -551,7 +553,7 @@ pkgProducts.forEach((item) => addItem(item))
               Selecteer 1 {mealLabel[activeMealType] || activeMealType.toLowerCase()}pakket
             </p>
           </div>
-          <img src="/mealyn/assets/mealynlogo.png" alt="Mealyn" style={{ height: 32 }} onError={handleImgError} />
+          <img src="/mealyn/assets/mealynlogo.png" alt="Mealyn" style={{ height: 64 }} onError={handleImgError} />
         </div>
 
         <div style={{ padding: "0 20px", display: "flex", flexDirection: "column", gap: 10 }}>
@@ -568,7 +570,7 @@ pkgProducts.forEach((item) => addItem(item))
                   position: "relative", borderRadius: 12, overflow: "hidden",
                   cursor: "pointer",
                   border: isSelected ? "3px solid #2D6A4F" : "3px solid transparent",
-                  height: 90,
+                 height: 160, 
                 }}
               >
                 <img
@@ -594,7 +596,7 @@ pkgProducts.forEach((item) => addItem(item))
                     backgroundColor: "rgba(255,255,255,0.88)", color: "#1A1A18",
                     fontWeight: 600, fontSize: "1rem", padding: "5px 18px", borderRadius: 20,
                   }}>
-                    {pkg.name} — €{pkg.price.toFixed(2)}
+                    {pkg.name}
                   </span>
                 </div>
               </div>
@@ -644,7 +646,7 @@ pkgProducts.forEach((item) => addItem(item))
               ← Pakket wijzigen
             </button>
           )}
-          <img src="/mealyn/assets/mealynlogo.png" alt="Mealyn" style={{ height: 32 }} onError={handleImgError} />
+          <img src="/mealyn/assets/mealynlogo.png" alt="Mealyn" style={{ height: 64 }} onError={handleImgError} />
         </div>
       </div>
 

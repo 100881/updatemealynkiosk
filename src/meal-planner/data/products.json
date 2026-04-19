@@ -16,7 +16,7 @@
           "image": "./assets/brood.jpg",
           "alternatives": [
             { "name": "Rijstbrood", "image": "./assets/rijstbrood.jpg", "for": ["Gluten"] },
-            { "name": "Rijstwafels", "image": "./assets/rijstwafels.jpg", "for": ["Koolhydraatarm"] }
+            { "name": "Rijstwafels", "image": "./assets/rijstwafel.jpg", "for": ["Koolhydraatarm"] }
           ]
         },
         {
@@ -26,14 +26,7 @@
             { "name": "Sojakaas", "image": "./assets/sojakaas.jpg", "for": ["Lactose/Melk", "Vegan"] }
           ]
         },
-        {
-          "name": "Ham",
-          "image": "./assets/ham.jpg",
-          "alternatives": [
-            { "name": "Tempeh", "image": "./assets/tempeh.jpg", "for": ["Vegan"] },
-            { "name": "Hummus", "image": "./assets/hummus.jpg", "for": ["Vegetarisch"] }
-          ]
-        },
+      
         {
           "name": "Boter",
           "image": "./assets/boter.jpg",
@@ -43,7 +36,7 @@
         },
         {
           "name": "Melk",
-          "image": "./assets/melk.jpg",
+          "image": "./assets/melk.png",
           "alternatives": [
             { "name": "Havermelk", "image": "./assets/havermelk.jpg", "for": ["Lactose/Melk", "Vegan"] },
             { "name": "Amandelmelk", "image": "./assets/amandelmelk.jpg", "for": ["Koolhydraatarm"] }
@@ -66,7 +59,7 @@
         },
         {
           "name": "Sinaasappelsap",
-          "image": "./assets/sinaasappelsap.jpg",
+          "image": "./assets/Sinaasappelsap.jpg",
           "alternatives": [
             { "name": "Water met citroen", "image": "./assets/water.jpg", "for": ["Suikervrij", "Koolhydraatarm", "Afvallen"] }
           ]
@@ -98,7 +91,7 @@
           "image": "./assets/volkorenbrood.jpg",
           "alternatives": [
             { "name": "Rijstbrood", "image": "./assets/rijstbrood.jpg", "for": ["Gluten"] },
-            { "name": "Rijstwafels", "image": "./assets/rijstwafels.jpg", "for": ["Koolhydraatarm"] }
+            { "name": "Rijstwafels", "image": "./assets/rijstwafel.jpg", "for": ["Koolhydraatarm"] }
           ]
         },
         {
@@ -116,12 +109,12 @@
         },
         {
           "name": "Komkommer",
-          "image": "./assets/komkommer.jpg",
+          "image": "./assets/komkommer.png",
           "alternatives": []
         },
         {
           "name": "Notenmix",
-          "image": "./assets/notenmix.jpg",
+          "image": "./assets/Notenmix.jpg",
           "alternatives": [
             { "name": "Zonnebloempitten", "image": "./assets/zonnebloempitten.jpg", "for": ["Noten/Pinda"] },
             { "name": "Pompoenpitten", "image": "./assets/pompoenpitten.jpg", "for": ["Noten/Pinda", "Koolhydraatarm"] }
@@ -144,7 +137,7 @@
         },
         {
           "name": "Sinaasappelsap",
-          "image": "./assets/sinaasappelsap.jpg",
+          "image": "./assets/Sinaasappelsap.jpg",
           "alternatives": [
             { "name": "Water met citroen", "image": "./assets/water.jpg", "for": ["Suikervrij", "Koolhydraatarm", "Afvallen"] }
           ]
@@ -173,7 +166,7 @@
         },
         {
           "name": "Banaan",
-          "image": "./assets/banaan.jpg",
+          "image": "./assets/banaan.png",
           "alternatives": [
             { "name": "Avocado", "image": "./assets/avocado.jpg", "for": ["Koolhydraatarm"] }
           ]
@@ -208,7 +201,7 @@
           "name": "Mango",
           "image": "./assets/mango.jpg",
           "alternatives": [
-            { "name": "Komkommer", "image": "./assets/komkommer.jpg", "for": ["Koolhydraatarm"] }
+            { "name": "Komkommer", "image": "./assets/komkommer.png", "for": ["Koolhydraatarm"] }
           ]
         },
         {
@@ -247,7 +240,7 @@
         },
         {
           "name": "Melk",
-          "image": "./assets/melk.jpg",
+          "image": "./assets/melk.png",
           "alternatives": [
             { "name": "Havermelk", "image": "./assets/havermelk.jpg", "for": ["Lactose/Melk", "Vegan"] },
             { "name": "Amandelmelk", "image": "./assets/amandelmelk.jpg", "for": ["Koolhydraatarm"] }
@@ -255,10 +248,8 @@
         },
         {
           "name": "Boter",
-          "image": "./assets/boter.jpg",
-          "alternatives": [
-            { "name": "Kokosolie", "image": "./assets/kokosolie.jpg", "for": ["Lactose/Melk", "Vegan"] }
-          ]
+          "image": "./assets/boter.jpg"
+          
         },
         {
           "name": "Aardbeien",
@@ -267,7 +258,7 @@
         },
         {
           "name": "Banaan",
-          "image": "./assets/banaan.jpg",
+          "image": "./assets/banaan.png",
           "alternatives": [
             { "name": "Avocado", "image": "./assets/avocado.jpg", "for": ["Koolhydraatarm"] }
           ]
@@ -289,7 +280,7 @@
         },
         {
           "name": "Slagroom",
-          "image": "./assets/slagroom.jpg",
+          "image": "./assets/slagroombus.jpg",
           "alternatives": [
             { "name": "Kokosslagroom", "image": "./assets/kokosslagroom.jpg", "for": ["Lactose/Melk", "Vegan"] }
           ]
@@ -298,7 +289,7 @@
     },
     {
       "id": 15,
-      "name": "De Dagelijkse Lunch",
+      "name": "Boterham Klassiek",
       "meal_type": "Lunch",
       "package": true,
       "taste": "hartig",
@@ -315,15 +306,15 @@
         },
         {
           "name": "Rijstwafels",
-          "image": "./assets/rijstwafels.jpg",
+          "image": "./assets/rijstwafel.jpg",
           "alternatives": [
-            { "name": "Komkommerschijfjes", "image": "./assets/komkommer.jpg", "for": ["Koolhydraatarm"] },
+            { "name": "Komkommerschijfjes", "image": "./assets/komkommer.png", "for": ["Koolhydraatarm"] },
             { "name": "Glutenvrije crackers", "image": "./assets/crackers.jpg", "for": ["Gluten"] }
           ]
         },
         {
           "name": "Groentesticks",
-          "image": "./assets/groentesticks.jpg",
+          "image": "./assets/Groentesticks.jpg",
           "alternatives": []
         },
         {
@@ -338,7 +329,7 @@
         },
         {
           "name": "Komkommer",
-          "image": "./assets/komkommer.jpg",
+          "image": "./assets/komkommer.png",
           "alternatives": []
         },
         {
@@ -360,7 +351,7 @@
     },
     {
       "id": 16,
-      "name": "De Fitte Lunch",
+      "name": "Zoet & Hartig",
       "meal_type": "Lunch",
       "package": true,
       "taste": "hartig",
@@ -380,7 +371,7 @@
         },
         {
           "name": "Komkommer",
-          "image": "./assets/komkommer.jpg",
+          "image": "./assets/komkommer.png",
           "alternatives": []
         },
         {
@@ -397,8 +388,8 @@
           ]
         },
         {
-          "name": "Olijven",
-          "image": "./assets/olijven.jpg",
+          "name": "olijven",
+          "image": "./assets/olijven2.png",
           "alternatives": []
         },
         {
@@ -418,7 +409,7 @@
         },
         {
           "name": "Tonijn",
-          "image": "./assets/tonijn.jpg",
+          "image": "./assets/tonijnsalada.jpg",
           "alternatives": [
             { "name": "Kikkererwten", "image": "./assets/kikkererwten.jpg", "for": ["Vegan", "Vegetarisch"] },
             { "name": "Tempeh", "image": "./assets/tempeh.jpg", "for": ["Vegan", "Vegetarisch", "Spieropbouw"] }
@@ -428,7 +419,7 @@
     },
     {
       "id": 17,
-      "name": "De Sterke Lunch",
+      "name": "Gezond Belegd",
       "meal_type": "Lunch",
       "package": true,
       "taste": "hartig",
@@ -490,9 +481,9 @@
         },
         {
           "name": "Proteinepoeder",
-          "image": "./assets/proteinepoeder.jpg",
+          "image": "./assets/plantaardig_proteinepoeder.jpg",
           "alternatives": [
-            { "name": "Plantaardig proteinepoeder", "image": "./assets/proteinepoeder.jpg", "for": ["Vegan", "Lactose/Melk"] }
+            { "name": "Plantaardig proteinepoeder", "image": "./assets/plantaardig_proteinepoeder.jpg", "for": ["Vegan", "Lactose/Melk"] }
           ]
         },
         {
@@ -504,7 +495,7 @@
     },
     {
       "id": 18,
-      "name": "De Verse Lunch",
+      "name": "Mix Pakket",
       "meal_type": "Lunch",
       "package": true,
       "taste": "neutraal",
@@ -533,17 +524,13 @@
         },
         {
           "name": "Komkommer",
-          "image": "./assets/komkommer.jpg",
+          "image": "./assets/komkommer.png",
           "alternatives": []
         },
+        
         {
-          "name": "Olijfolie",
-          "image": "./assets/olijfolie.jpg",
-          "alternatives": []
-        },
-        {
-          "name": "Olijven",
-          "image": "./assets/olijven.jpg",
+          "name": "olijven",
+          "image": "./assets/olijven2.png",
           "alternatives": []
         },
         {
@@ -597,8 +584,8 @@
           "name": "Crackers",
           "image": "./assets/crackers.jpg",
           "alternatives": [
-            { "name": "Rijstwafels", "image": "./assets/rijstwafels.jpg", "for": ["Gluten"] },
-            { "name": "Komkommerschijfjes", "image": "./assets/komkommer.jpg", "for": ["Koolhydraatarm"] }
+            { "name": "Rijstwafels", "image": "./assets/rijstwafel.jpg", "for": ["Gluten"] },
+            { "name": "Komkommerschijfjes", "image": "./assets/komkommer.png", "for": ["Koolhydraatarm"] }
           ]
         },
         {
@@ -614,15 +601,15 @@
           ]
         },
         {
-          "name": "Olijven",
-          "image": "./assets/olijven.jpg",
+          "name": "olijven",
+          "image": "./assets/olijven2.png",
           "alternatives": []
         },
         {
           "name": "Rijstwafels",
-          "image": "./assets/rijstwafels.jpg",
+          "image": "./assets/rijstwafel.jpg",
           "alternatives": [
-            { "name": "Komkommerschijfjes", "image": "./assets/komkommer.jpg", "for": ["Koolhydraatarm"] }
+            { "name": "Komkommerschijfjes", "image": "./assets/komkommer.png", "for": ["Koolhydraatarm"] }
           ]
         }
       ]
@@ -646,7 +633,7 @@
         },
         {
           "name": "Banaan",
-          "image": "./assets/banaan.jpg",
+          "image": "./assets/banaan.png",
           "alternatives": [
             { "name": "Avocado", "image": "./assets/avocado.jpg", "for": ["Koolhydraatarm"] }
           ]
@@ -667,7 +654,7 @@
           "name": "Rijstwafel",
           "image": "./assets/rijstwafel.jpg",
           "alternatives": [
-            { "name": "Komkommerschijfjes", "image": "./assets/komkommer.jpg", "for": ["Koolhydraatarm", "Gluten"] }
+            { "name": "Komkommerschijfjes", "image": "./assets/komkommer.png", "for": ["Koolhydraatarm", "Gluten"] }
           ]
         },
         {
@@ -677,7 +664,7 @@
         },
         {
           "name": "Mandarijn",
-          "image": "./assets/mandarijn.jpg",
+          "image": "./assets/Mandarijn.jpg",
           "alternatives": []
         },
         {
@@ -710,10 +697,10 @@
         },
         {
           "name": "Koekjes",
-          "image": "./assets/koekjes.jpg",
+          "image": "./assets/Koekjes.png",
           "alternatives": [
             { "name": "Glutenvrije koekjes", "image": "./assets/glutenvrijekoekjes.jpg", "for": ["Gluten"] },
-            { "name": "Rijstwafels", "image": "./assets/rijstwafels.jpg", "for": ["Koolhydraatarm"] },
+            { "name": "Rijstwafels", "image": "./assets/rijstwafel.jpg", "for": ["Koolhydraatarm"] },
             { "name": "Dadels", "image": "./assets/dadels.jpg", "for": ["Suikervrij", "Vegan"] }
           ]
         },
@@ -730,13 +717,12 @@
           "image": "./assets/snickers.jpg",
           "alternatives": [
             { "name": "Vegan energiereep", "image": "./assets/veganreep.jpg", "for": ["Lactose/Melk", "Vegan"] },
-            { "name": "Zonnebloempitten reep", "image": "./assets/veganreep.jpg", "for": ["Noten/Pinda"] },
             { "name": "Suikervrije energiereep", "image": "./assets/veganreep.jpg", "for": ["Suikervrij", "Koolhydraatarm"] }
           ]
         },
         {
           "name": "Stroopwafels",
-          "image": "./assets/stroopwafels.jpg",
+          "image": "./assets/Stroopwafels.jpg",
           "alternatives": [
             { "name": "Glutenvrije stroopwafels", "image": "./assets/glutenvrijestroopwafel.jpg", "for": ["Gluten"] },
             { "name": "Dadels", "image": "./assets/dadels.jpg", "for": ["Suikervrij", "Vegan"] }
@@ -759,71 +745,6 @@
           ]
         }
       ]
-    },
-    {
-      "id": 24,
-      "name": "Eiwitrijk Snack Pakket",
-      "meal_type": "Snacks",
-      "package": true,
-      "taste": "neutraal",
-      "diet": ["Geen voorkeur", "Koolhydraatarm", "Suikervrij"],
-      "allergens": ["Lactose/Melk", "Noten/Pinda"],
-      "goal": ["Spieropbouw", "Meer energie"],
-      "price": 5.8,
-      "image": "./assets/eiwitrijk_snack.png",
-      "products": [
-        {
-          "name": "Eiwitreep",
-          "image": "./assets/eiwitreep.jpg",
-          "alternatives": [
-            { "name": "Vegan eiwitreep", "image": "./assets/veganeiwitreep.jpg", "for": ["Vegan", "Lactose/Melk"] },
-            { "name": "Suikervrije eiwitreep", "image": "./assets/eiwitreep.jpg", "for": ["Suikervrij"] }
-          ]
-        },
-        {
-          "name": "Kwark",
-          "image": "./assets/kwarknaturel.jpg",
-          "alternatives": [
-            { "name": "Kokosyoghurt", "image": "./assets/kokosyoghurt.jpg", "for": ["Lactose/Melk", "Vegan"] },
-            { "name": "Soja kwark", "image": "./assets/kwarknaturel.jpg", "for": ["Vegan"] }
-          ]
-        },
-        {
-          "name": "Noten",
-          "image": "./assets/nootjes.jpg",
-          "alternatives": [
-            { "name": "Zonnebloempitten", "image": "./assets/zonnebloempitten.jpg", "for": ["Noten/Pinda"] },
-            { "name": "Pompoenpitten", "image": "./assets/pompoenpitten.jpg", "for": ["Noten/Pinda", "Koolhydraatarm"] }
-          ]
-        },
-        {
-          "name": "Hardgekookt ei",
-          "image": "./assets/eieren.jpg",
-          "alternatives": [
-            { "name": "Tofu blokjes", "image": "./assets/tofu.jpg", "for": ["Ei", "Vegan"] },
-            { "name": "Tempeh blokjes", "image": "./assets/tempeh.jpg", "for": ["Vegan"] }
-          ]
-        },
-        {
-          "name": "Amandelen",
-          "image": "./assets/amandelen.jpg",
-          "alternatives": [
-            { "name": "Zonnebloempitten", "image": "./assets/zonnebloempitten.jpg", "for": ["Noten/Pinda"] },
-            { "name": "Pompoenpitten", "image": "./assets/pompoenpitten.jpg", "for": ["Noten/Pinda", "Koolhydraatarm"] }
-          ]
-        },
-        {
-          "name": "Proteinepoeder",
-          "image": "./assets/proteinepoeder.jpg",
-          "alternatives": [
-            { "name": "Plantaardig proteinepoeder", "image": "./assets/proteinepoeder.jpg", "for": ["Vegan", "Lactose/Melk"] }
-          ]
-        },
-        {
-          "name": "Chiazaad",
-          "image": "./assets/chiazaad.jpg",
-          "alternatives": []
-        }
-      ]
     }
+    
   ]
