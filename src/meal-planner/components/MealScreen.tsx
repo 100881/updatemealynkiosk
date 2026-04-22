@@ -176,14 +176,51 @@ export default function MealScreen({ answers, onReset, onBack }: Props) {
       const recipeCarts: RecipeCart[] = matchedRecipes.map((recipe: any) => {
         const ingredients: CartItem[] = recipe.ingredients.map((ing: any) => {
           const priceEntry = (ingredientPrices as any)[ing.name] || { price: 0, image: FALLBACK_IMAGE }
-          const totalIngredientPrice = parseFloat((priceEntry.price * persons).toFixed(2))
-          return {
-            id: `ingredient-${ing.name.toLowerCase().replace(/\s+/g, "-")}`,
-            name: ing.name,
-            price: totalIngredientPrice,
-            image: safeImage(ing.image || priceEntry.image),
-            quantity: 1,
-          }
+          const ALWAYS_ONE = [
+              "Olijfolie",
+              "Knoflookpoeder",
+              "Zout en peper",
+              "Italiaanse kruiden",
+              "Paprikapoeder",
+              "Rozemarijn",
+              "Provençaalse kruiden",
+              "Komijnpoeder",
+              "Mexicaanse kruidenmix",
+              "Currykruiden",
+              "Tikka masala kruidenmix",
+              "Shawarma kruidenmix",
+              "Ras el hanout",
+              "Garam masala",
+              "Groene currypasta",
+              "Rode currypasta",
+              "Harissa pasta",
+              "Kurkuma",
+              "Oregano",
+              "Verse oregano",
+              "Verse tijm",
+              "Verse rozemarijn",
+              "Sesamolie",
+              "Sojasaus",
+              "Vissaus",
+              "Tahini",
+              "Miso pasta",
+              "Miso pasta (wit)",
+              "Rijstazijn",
+              "Balsamicoazijn",
+              "Tomatenpuree",
+              "Groentebouillon",
+              "Kippenbouillon",
+              "Vleesbouillon",
+              "Passata",
+            ]
+
+            return {
+              id: `ingredient-${ing.name.toLowerCase().replace(/\s+/g, "-")}`,
+              name: ing.name,
+              price: priceEntry.price,
+              image: safeImage(ing.image || priceEntry.image),
+              quantity: ALWAYS_ONE.includes(ing.name) ? 1 : persons,
+            }
         })
         return {
           id: recipe.id.toString(),
@@ -205,10 +242,7 @@ export default function MealScreen({ answers, onReset, onBack }: Props) {
       setSelectedRecipeIds([])
       setPhase(PACKAGE_MEAL_TYPES.includes(nextMeal) ? "pakket" : "select")
     } else {
-      const namen = recipesCart
-        .filter((r) => selectedRecipeIds.includes(r.id))
-        .map((r) => r.name)
-      onReset?.(namen)
+      setPhase("list")
     }
   }
 
