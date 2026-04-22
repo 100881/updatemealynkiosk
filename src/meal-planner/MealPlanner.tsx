@@ -2,9 +2,10 @@ import { useState } from "react"
 import WelcomeScreen from "./components/WelcomeScreen"
 import QuestionScreen from "./components/QuestionScreen"
 import MealScreen from "./components/MealScreen"
+import CheckoutScreen from "./components/CheckoutScreen"
 import type { Answers } from "./utils/matchRecipes"
 
-type Screen = "welcome" | "questions" | "meal"
+type Screen = "welcome" | "questions" | "meal" | "checkout"
 
 export default function MealPlanner() {
   const [screen, setScreen] = useState<Screen>("welcome")
@@ -29,7 +30,22 @@ export default function MealPlanner() {
   }
 
   if (screen === "meal" && answers) {
-    return <MealScreen answers={answers} onReset={handleReset} />
+    return (
+      <MealScreen
+        answers={answers}
+        onReset={() => setScreen("checkout")}
+        onBack={() => setScreen("questions")}
+      />
+    )
+  }
+
+  if (screen === "checkout") {
+    return (
+      <CheckoutScreen
+        onBack={() => setScreen("meal")}
+        onDone={handleReset}
+      />
+    )
   }
 
   return null

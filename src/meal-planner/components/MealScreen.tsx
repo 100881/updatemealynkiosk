@@ -7,7 +7,7 @@ import { useCart } from "../context/CartContext"
 
 interface Props {
   answers: Answers
-  onReset?: () => void
+  onReset?: (recipes: string[]) => void
   onAddMore?: () => void
   onBack?: () => void
 }
@@ -205,7 +205,10 @@ export default function MealScreen({ answers, onReset, onBack }: Props) {
       setSelectedRecipeIds([])
       setPhase(PACKAGE_MEAL_TYPES.includes(nextMeal) ? "pakket" : "select")
     } else {
-      setPhase("list")
+      const namen = recipesCart
+        .filter((r) => selectedRecipeIds.includes(r.id))
+        .map((r) => r.name)
+      onReset?.(namen)
     }
   }
 
@@ -278,11 +281,21 @@ pkgProducts.forEach((item) => addItem(item))
   }
 
   const handleAddSelectedRecipes = () => {
-    recipesCart
-      .filter((r) => selectedRecipeIds.includes(r.id))
-      .forEach((recipe) => recipe.ingredients.forEach((ing) => addItem(ing)))
-    goToNextMealType()
+  recipesCart
+    .filter((r) => selectedRecipeIds.includes(r.id))
+    .forEach((recipe) => recipe.ingredients.forEach((ing) => addItem(ing)))
+  
+  const nextIndex = currentMealTypeIndex + 1
+  if (nextIndex < mealTypes.length) {
+    setCurrentMealTypeIndex(nextIndex)
+    const nextMeal = mealTypes[nextIndex]
+    setSelectedPackage(null)
+    setSelectedRecipeIds([])
+    setPhase(PACKAGE_MEAL_TYPES.includes(nextMeal) ? "pakket" : "select")
+  } else {
+    setPhase("list")
   }
+}
 
   const toggleSelectProduct = (id: string) => {
     setSelectedProducts((prev) => ({ ...prev, [id]: !prev[id] }))
@@ -526,7 +539,12 @@ pkgProducts.forEach((item) => addItem(item))
             )}
           </div>
           <button
-            onClick={onReset}
+            onClick={() => {
+  const namen = recipesCart
+    .filter((r) => selectedRecipeIds.includes(r.id))
+    .map((r) => r.name)
+  onReset?.(namen)
+}}
             style={{
               width: "100%", padding: "16px", border: "none",
               borderRadius: 14, backgroundColor: "#2D6A4F",
@@ -622,7 +640,7 @@ pkgProducts.forEach((item) => addItem(item))
 
   // ── RECEPT / PRODUCT SELECTIE ──────────────────────────────────────
   return (
-    <div style={{ fontFamily: "sans-serif", maxWidth: 480, margin: "0 auto" }}>
+    <div style={{ fontFamily: "sans-serif", maxWidth: 480, margin: "0 auto", minHeight: "100vh", backgroundColor: "#fff" }}>
       <div style={headerStyle}>
         <div>
           <h2 style={{ margin: 0, fontSize: "1.1rem" }}>
@@ -676,6 +694,7 @@ pkgProducts.forEach((item) => addItem(item))
                 {selectedRecipeIds.length} van {maxRecipes} recept{maxRecipes > 1 ? "en" : ""} gekozen
               </div>
 
+             <div style={{ display: "flex", flexWrap: "wrap", gap: 12 }}>
               {recipesCart.map((recipe) => {
                 const isSelected = selectedRecipeIds.includes(recipe.id)
                 const isDisabled = !isSelected && selectedRecipeIds.length >= maxRecipes
@@ -690,6 +709,7 @@ pkgProducts.forEach((item) => addItem(item))
                       cursor: isDisabled ? "not-allowed" : "pointer",
                       opacity: isDisabled ? 0.45 : 1,
                       transition: "opacity 0.2s, border 0.2s",
+                      width: "calc(50% - 6px)",
                     }}
                   >
                     <div style={{ position: "relative" }}>
@@ -713,13 +733,14 @@ pkgProducts.forEach((item) => addItem(item))
                   </div>
                 )
               })}
+              </div>
 
               <button
                 onClick={handleAddSelectedRecipes}
                 disabled={selectedRecipeIds.length !== maxRecipes}
                 style={{
                   width: "100%", padding: "0.9rem", border: "none",
-                  borderRadius: 12, marginTop: 8,
+                 borderRadius: 12, marginTop: 8, marginBottom: 80,
                   backgroundColor: selectedRecipeIds.length !== maxRecipes ? "#ccc" : "#2D6A4F",
                   color: "white", fontWeight: 700, fontSize: "1rem",
                   cursor: selectedRecipeIds.length !== maxRecipes ? "not-allowed" : "pointer",

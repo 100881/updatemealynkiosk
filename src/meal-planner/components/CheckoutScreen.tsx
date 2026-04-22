@@ -1,49 +1,53 @@
-import React, { useEffect } from "react"
+import React from "react"
 import { useCart } from "../context/CartContext"
 
 interface Props {
   onBack?: () => void
+  onDone?: () => void
+  selectedRecipes?: string[]
 }
 
-declare global {
-  interface Window {
-    qz: any
-  }
-}
+export default function CheckoutScreen({ onBack, onDone, selectedRecipes = [] }: Props) {
+  const { cart, clearCart } = useCart()
 
-export default function CheckoutScreen({ onBack }: Props) {
-  const { cart } = useCart()
-
-  useEffect(() => {
-    const script = document.createElement("script")
-    script.src = "/mealyn/qz-tray.js"
-    script.async = true
-    document.body.appendChild(script)
-
-    return () => {
-      document.body.removeChild(script)
+  const encodeCP858 = (text: string): number[] => {
+    const bytes: number[] = []
+    for (const c of text) {
+      if (c === '€') {
+        bytes.push(0xD5)
+      } else {
+        const code = c.charCodeAt(0)
+        bytes.push(code > 255 ? 0x3F : code)
+      }
     }
-  }, [])
+    return bytes
+  }
 
   const handlePrint = async () => {
     try {
-      const qz = window.qz
+      const devices = await (navigator as any).usb.getDevices()
+      const bekend = devices.find((d: any) => d.vendorId === 0x04b8)
 
-      if (!qz.websocket.isActive()) {
-        await qz.websocket.connect()
+      const device = bekend
+        ? bekend
+        : await (navigator as any).usb.requestDevice({
+            filters: [{ vendorId: 0x04b8 }]
+          })
+
+      await device.open()
+
+      if (device.configuration === null) {
+        await device.selectConfiguration(1)
       }
 
+      await device.claimInterface(0)
+
       const total = cart.reduce((sum, i) => sum + i.price * i.quantity, 0)
-
-      const config = qz.configs.create("EPSON TM-T20III Receipt")
-
-      const ESC = "\x1B"
-      const GS = "\x1D"
 
       const WIDTH = 42
       const LINE = "-".repeat(WIDTH) + "\n"
 
-      const euro = (n: number) => "\xD5" + n.toFixed(2)
+      const euro = (n: number) => `€${n.toFixed(2)}`
 
       const line = (left: string, right: string) => {
         const maxLeft = WIDTH - right.length
@@ -52,38 +56,59 @@ export default function CheckoutScreen({ onBack }: Props) {
         return name + spaces + right + "\n"
       }
 
-      const data = [
-        ESC + "@",
-        ESC + "t\x13",
-        ESC + "a\x01",
-        ESC + "E\x01",
-        ESC + "!\x11",
+      const receptenRegels = selectedRecipes.length > 0
+        ? [
+            "\n",
+            LINE,
+            "\x1Ba\x01",
+            "\x1BE\x01",
+            "Bijbehorende recepten:\n",
+            "\x1BE\x00",
+            "\x1Ba\x00",
+            ...selectedRecipes.map((naam) => `- ${naam}\n`),
+          ]
+        : []
+
+      const tekstRegels = [
+        "\x1B@",
+        "\x1Bt\x13",
+        "\x1Ba\x01",
+        "\x1BE\x01",
+        "\x1B!\x11",
         "MEALYN\n",
-        ESC + "!\x00",
-        ESC + "E\x00",
+        "\x1B!\x00",
+        "\x1BE\x00",
         "Boodschappenlijst\n",
         LINE,
-        ESC + "a\x00",
+        "\x1Ba\x00",
         ...cart.map((item) =>
-          line(item.name, euro(item.price * item.quantity))
+          item.quantity > 1
+            ? line(`${item.quantity}x ${item.name}`, euro(item.price * item.quantity))
+            : line(item.name, euro(item.price * item.quantity))
         ),
         LINE,
-        ESC + "E\x01",
+        "\x1BE\x01",
         line("Totaal:", euro(total)),
-        ESC + "E\x00",
+        "\x1BE\x00",
+        ...receptenRegels,
         "\n",
-        ESC + "a\x01",
+        "\x1Ba\x01",
         "Gegenereerd door Mealyn\n",
         "\n\n\n",
-        GS + "V\x41\x00"
-      ]
+        "\x1DVA\x00"
+      ].join("")
 
-      await qz.print(config, data)
-      window.location.href = "/"
+      const data = new Uint8Array(encodeCP858(tekstRegels))
+
+      await device.transferOut(1, data)
+      await device.close()
+
+      clearCart()
+      onDone?.()
 
     } catch (err) {
       console.error("Printfout:", err)
-      alert("Kan niet verbinden met printer. Zorg dat QZ Tray actief is.")
+      alert("Kan niet verbinden met printer. Controleer de USB verbinding.")
     }
   }
 
@@ -91,10 +116,14 @@ export default function CheckoutScreen({ onBack }: Props) {
     const total = cart.reduce((sum, i) => sum + i.price * i.quantity, 0)
 
     const body = cart
-      .map((item) => `${item.name} - €${(item.price * item.quantity).toFixed(2)}`)
+      .map((item) => `${item.quantity > 1 ? `${item.quantity}x ` : ""}${item.name} - €${(item.price * item.quantity).toFixed(2)}`)
       .join("%0A")
 
-    const footer = `%0A%0ATotaal: €${total.toFixed(2)}`
+    const recepten = selectedRecipes.length > 0
+      ? `%0A%0ABijbehorende recepten:%0A${selectedRecipes.map((r) => `- ${r}`).join("%0A")}`
+      : ""
+
+    const footer = `%0A%0ATotaal: €${total.toFixed(2)}${recepten}`
 
     window.location.href =
       `mailto:?subject=Mijn boodschappenlijst&body=${body}${footer}`
@@ -113,7 +142,6 @@ export default function CheckoutScreen({ onBack }: Props) {
       backgroundColor: "#ffffff",
     }}>
 
-      {/* Logo rechtsboven */}
       <div style={{
         width: "100%",
         display: "flex",

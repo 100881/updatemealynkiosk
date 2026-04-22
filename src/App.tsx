@@ -9,10 +9,11 @@ import { CartProvider } from "./meal-planner/context/CartContext"
 export default function App() {
   const [screen, setScreen] = useState<"welcome" | "questions" | "meal" | "checkout">("welcome")
   const [answers, setAnswers] = useState<Answers | null>(null)
+  const [selectedRecipes, setSelectedRecipes] = useState<string[]>([])
 
   return (
     <CartProvider>
-      <div style={{ maxWidth: 480, margin: "0 auto" }}>
+      <div style={{ width: '100%' }}>
         {screen === "welcome" && (
           <WelcomeScreen onStart={() => setScreen("questions")} />
         )}
@@ -28,11 +29,21 @@ export default function App() {
           <MealScreen
             answers={answers}
             onAddMore={() => setScreen("questions")}
-            onReset={() => setScreen("checkout")}  // ← was: setScreen("welcome")
+            onReset={(recipes: string[]) => {
+              setSelectedRecipes(recipes)
+              setScreen("checkout")
+            }}
           />
         )}
         {screen === "checkout" && (
-          <CheckoutScreen onBack={() => setScreen("meal")} />
+          <CheckoutScreen
+            onBack={() => setScreen("meal")}
+            onDone={() => {
+              setSelectedRecipes([])
+              setScreen("welcome")
+            }}
+            selectedRecipes={selectedRecipes}
+          />
         )}
       </div>
     </CartProvider>
